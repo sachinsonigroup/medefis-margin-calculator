@@ -121,6 +121,10 @@ summary{padding:15px;font-weight:900;color:var(--navy);cursor:pointer}
 @media(max-width:620px){.company-logo{width:125px;height:48px}}
 
 .metric small{display:block;color:var(--muted);font-size:10px;margin-top:5px;line-height:1.3}
+
+.rtr-intro{color:var(--muted);font-size:13px;line-height:1.5;margin:0 0 12px}
+.rtr-details-grid{margin-top:0!important;margin-bottom:14px}
+@media(max-width:620px){.rtr-details-grid{grid-template-columns:1fr!important}}
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
@@ -149,15 +153,7 @@ summary{padding:15px;font-weight:900;color:var(--navy);cursor:pointer}
  &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;section id=&quot;itRtrDetails&quot; class=&quot;section it-only&quot;&gt;
- &lt;div class=&quot;eyebrow&quot;&gt;RTR DETAILS&lt;/div&gt;
- &lt;h2&gt;Candidate &amp; Client Information&lt;/h2&gt;
- &lt;div class=&quot;helper&quot;&gt;These details are used to generate the default Right to Represent message and do not affect margin calculations.&lt;/div&gt;
- &lt;div class=&quot;grid&quot; style=&quot;grid-template-columns:1fr 1fr&quot;&gt;
-  &lt;div class=&quot;field&quot;&gt;&lt;label&gt;Candidate Full Legal Name&lt;/label&gt;&lt;input id=&quot;rtrCandidateName&quot; type=&quot;text&quot; placeholder=&quot;Enter full legal name&quot;&gt;&lt;/div&gt;
-  &lt;div class=&quot;field&quot;&gt;&lt;label&gt;Client Name&lt;/label&gt;&lt;input id=&quot;rtrClientName&quot; type=&quot;text&quot; placeholder=&quot;Enter client name&quot;&gt;&lt;/div&gt;
- &lt;/div&gt;
-&lt;/section&gt;
+
 
 &lt;section class=&quot;section&quot;&gt;
  &lt;div class=&quot;eyebrow&quot;&gt;PACKAGE INPUTS&lt;/div&gt;&lt;h2&gt;Enter Assignment &amp; Pay Details&lt;/h2&gt;
@@ -215,7 +211,12 @@ summary{padding:15px;font-weight:900;color:var(--navy);cursor:pointer}
 
 &lt;section class=&quot;section&quot;&gt;
  &lt;div class=&quot;eyebrow&quot;&gt;READY TO USE&lt;/div&gt;&lt;h2 id=&quot;messageHeading&quot;&gt;📄 Right to Represent (RTR)&lt;/h2&gt;
- &lt;div id=&quot;pitch&quot; class=&quot;pitch&quot;&gt;&lt;/div&gt;
+ &lt;div class=&quot;rtr-intro&quot;&gt;Enter the candidate and client details below to generate the Right to Represent authorization. These details do not affect margin calculations.&lt;/div&gt;
+&lt;div class=&quot;grid rtr-details-grid&quot;&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;label&gt;Candidate Full Legal Name&lt;/label&gt;&lt;input id=&quot;rtrCandidateName&quot; type=&quot;text&quot; placeholder=&quot;Enter full legal name&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;label&gt;Client Name&lt;/label&gt;&lt;input id=&quot;rtrClientName&quot; type=&quot;text&quot; placeholder=&quot;Enter client name&quot;&gt;&lt;/div&gt;
+ &lt;/div&gt;
+&lt;div id=&quot;pitch&quot; class=&quot;pitch&quot;&gt;&lt;/div&gt;
  &lt;button class=&quot;copy&quot; onclick=&quot;copyPitch()&quot;&gt;&lt;span id=&quot;copyButtonText&quot;&gt;Copy RTR&lt;/span&gt;&lt;/button&gt;
  &lt;span id=&quot;copyStatus&quot; class=&quot;helper&quot;&gt;&lt;/span&gt;
 &lt;/section&gt;
