@@ -1,4 +1,415 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Medefis Calculator through Siri Health</title><style>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Siri Staffing Calculator Suite</title>
+<style>
+*{box-sizing:border-box} body{margin:0;background:#eef4f9;font-family:Inter,Segoe UI,Arial,sans-serif;color:#182433}
+.shell{max-width:1280px;margin:22px auto;padding:0 14px}
+.shell-head{background:#fff;border:1px solid #dbe5ee;border-radius:18px 18px 0 0;padding:16px 22px;display:grid;grid-template-columns:180px 1fr 180px;align-items:center;box-shadow:0 10px 30px rgba(20,55,90,.08)}
+.shell-head img{width:170px;height:64px;object-fit:contain;display:block}
+.title{text-align:center} .title h1{margin:0;color:#123d63;font-size:27px} .title p{margin:5px 0 0;color:#657487;font-weight:600}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;background:#fff;padding:12px 22px 16px;border-left:1px solid #dbe5ee;border-right:1px solid #dbe5ee}
+.tab{padding:15px;border:1px solid #dbe5ee;border-radius:11px;background:#f7fafc;color:#182433;font-weight:900;font-size:15px;cursor:pointer}
+.tab.active{background:linear-gradient(135deg,#123d63,#1769aa);color:#fff;border-color:#123d63}
+.frame-wrap{background:#fff;border:1px solid #dbe5ee;border-top:0;border-radius:0 0 18px 18px;overflow:hidden}
+iframe{width:100%;border:0;display:block;min-height:1200px;background:#fff}
+.hidden{display:none}
+@media(max-width:700px){.shell-head{grid-template-columns:1fr;text-align:center}.shell-head img{margin:auto}.shell-head .spacer{display:none}.title h1{font-size:22px}.tabs{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="shell-head">
+<img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDEwODAgMzUxLjIiPgogIDxkZWZzPgogICAgPHN0eWxlPgogICAgICAuY2xzLTEgewogICAgICAgIGZpbGw6ICMzZjdmZjg7CiAgICAgIH0KCiAgICAgIC5jbHMtMSwgLmNscy0yIHsKICAgICAgICBzdHJva2Utd2lkdGg6IDBweDsKICAgICAgfQoKICAgICAgLmNscy0yIHsKICAgICAgICBmaWxsOiAjMzEzMTMxOwogICAgICB9CiAgICA8L3N0eWxlPgogIDwvZGVmcz4KICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0zNi45LDM1YzE2LjQtMTYuMywzNi4yLTI0LjQsNTkuNS0yNC40aDg2LjJ2MzUuN2gtODcuMmMtMTQuNSwwLTI2LjMsNS40LTM1LjQsMTYuMi03LjcsOS42LTExLjYsMjAuMi0xMS42LDMxLjlIMTIuMmMwLTIzLjQsOC4yLTQzLjIsMjQuNi01OS41Wk0xNzYuNSwxMjYuNmMtNCwxMC40LTkuOSwxOS41LTE3LjcsMjcuNC0xNi42LDE2LjItMzYuNCwyNC4zLTU5LjYsMjQuM0gxMy4xdi0zNS45aDg3LjJjMTQuNSwwLDI2LjMtNS40LDM1LjQtMTYuMiw3LjctOS42LDExLjYtMjAuMiwxMS42LTMxLjloMzUuMmMwLDExLjItMiwyMi02LDMyLjRaIi8+CiAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMjU5LjcsMzVjMTYuNC0xNi4zLDM2LjItMjQuNCw1OS41LTI0LjRoODYuMnYzNS43aC04Ny4yYy0xNC41LDAtMjYuMyw1LjQtMzUuNCwxNi4yLTcuNyw5LjYtMTEuNiwyMC4yLTExLjYsMzEuOWgtMzYuMWMwLTIzLjQsOC4yLTQzLjIsMjQuNi01OS41Wk0zOTkuNCwxMjYuNmMtNCwxMC40LTkuOSwxOS41LTE3LjcsMjcuNC0xNi42LDE2LjItMzYuNCwyNC4zLTU5LjYsMjQuM2gtODYuMnYtMzUuOWg4Ny4yYzE0LjUsMCwyNi4zLTUuNCwzNS40LTE2LjIsNy43LTkuNiwxMS42LTIwLjIsMTEuNi0zMS45aDM1LjJjMCwxMS4yLTIsMjItNiwzMi40WiIvPgogIDxnPgogICAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMjUuMiwzMTcuNWMzLjIsNi40LDguMywxMy42LDE2LjMsMTMuNnMxMS42LTQuMiwxMS42LTEwLjljMC0xNS44LTM5LTEyLjMtMzktNDEuMXMxMi42LTMwLjQsMzEtMzAuNCwyMyw1LjUsMzAuMywxNy42bC0xMC4xLDcuOWMtNC02LjktOC4yLTEzLjMtMTcuMi0xMy4zcy0xMC41LDQuNy0xMC41LDExLjNjMCwxNS42LDM5LjgsMTEuMiwzOS44LDQxLjFzLTE0LjEsMzAtMzIuNCwzMC0yNS4yLTUtMzIuNS0xOGwxMi42LTcuN1oiLz4KICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTExMS42LDI1Ni41YzAsNS41LTQuNywxMC4yLTEwLjIsMTAuMnMtMTAuMi00LjctMTAuMi0xMC4yLDQuNy0xMC4yLDEwLjItMTAuMiwxMC4yLDQuNywxMC4yLDEwLjJaTTkxLjQsMjgwLjdoMTkuOXY2MGgtMTkuOXYtNjBaIi8+CiAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0xMjkuMiwyODAuN2gzMS40YzEwLjUsMCwyMC4xLDYuOSwyMC4xLDE4LjNzLTMuNiwxMy4zLTExLjMsMTUuMmwxNy4zLDI2LjZoLTIyLjRsLTEzLjgtMjkuNWguM2M3LjMsMCwxMC4xLTQuNCwxMC4xLTExLjVzLTQuMy0xMC44LTkuNC0xMC44aC0yLjJ2NTEuN2gtMTkuOXYtNjBaIi8+CiAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0yMTYuNywyNTYuNWMwLDUuNS00LjcsMTAuMi0xMC4yLDEwLjJzLTEwLjItNC43LTEwLjItMTAuMiw0LjctMTAuMiwxMC4yLTEwLjIsMTAuMiw0LjcsMTAuMiwxMC4yWk0xOTYuNSwyODAuN2gxOS45djYwaC0xOS45di02MFoiLz4KICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTI3OS42LDI1MS4xaDI1LjJ2ODkuNmgtMjUuMnYtODkuNloiLz4KICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTM3MiwzMzEuM2MwLDUuMy0xLjEsMTAtNy4zLDEwcy02LjItMS41LTguMy01bC0yMS0zNGgtLjN2MzguNWgtMTB2LTQ5LjRjMC00LjgsMS0xMS4yLDEwLjQtMTEuMnM4LjksMi45LDExLjksNy43bDE0LjQsMjIuOGguM3YtMzAuNmgxMHY1MS4yWiIvPgogICAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMzkwLjYsMzQwLjd2LTgwLjljMC0xMC4yLDYuMi0xNS45LDE3LTE1LjloMTkuOXY4LjloLTEyYy01LDAtNSw0LTUsNy43djIwLjJoMTQuOHY5LjdoLTE0Ljh2NTAuNGgtMTkuOVoiLz4KICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTQ2MS4zLDI4MC4xYzE3LDAsMzAuNiwxMy40LDMwLjYsMzAuNnMtMTMuNiwzMC42LTMwLjYsMzAuNi0zMC42LTEzLjQtMzAuNi0zMC42LDEzLjYtMzAuNiwzMC42LTMwLjZaTTQ2MS4zLDMzNC4xYzguMywwLDkuMy0xMS42LDkuMy0yMy40cy0xLTIzLjQtOS4zLTIzLjQtOS4zLDExLjYtOS4zLDIzLjQsMSwyMy40LDkuMywyMy40WiIvPgogICAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNNTA4LjcsMzE3LjVjMy4yLDYuNCw4LjMsMTMuNiwxNi4zLDEzLjZzMTEuNi00LjIsMTEuNi0xMC45YzAtMTUuOC0zOS0xMi4zLTM5LTQxLjFzMTIuNi0zMC40LDMxLTMwLjQsMjMsNS41LDMwLjMsMTcuNmwtMTAuMSw3LjljLTQtNi45LTguMi0xMy4zLTE3LjItMTMuM3MtMTAuNSw0LjctMTAuNSwxMS4zYzAsMTUuNiwzOS44LDExLjIsMzkuOCw0MS4xcy0xNC4xLDMwLTMyLjQsMzAtMjUuMi01LTMyLjUtMThsMTIuNi03LjdaIi8+CiAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik02MDAuMywyODAuMWMxNywwLDMwLjYsMTMuNCwzMC42LDMwLjZzLTEzLjYsMzAuNi0zMC42LDMwLjYtMzAuNi0xMy40LTMwLjYtMzAuNiwxMy42LTMwLjYsMzAuNi0zMC42Wk02MDAuMywzMzQuMWM4LjMsMCw5LjMtMTEuNiw5LjMtMjMuNHMtMS0yMy40LTkuMy0yMy40LTkuMywxMS42LTkuMywyMy40LDEsMjMuNCw5LjMsMjMuNFoiLz4KICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTY2NC4xLDI0My45djc5LjdjMCw2LjIuOCw4LjMsNS4zLDguM2g4LjR2OC45aC0xOS44Yy05LjEsMC0xMy44LTMuNi0xMy44LTEydi04NC44aDE5LjlaIi8+CiAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik03MDcsMjgwLjd2MzUuN2MwLDcuMywxLjQsMTMuOCwxMC4xLDEzLjhzOS40LTQuOCw5LjQtMTAuN3YtMzguOWgxMHY0MC4xYzAsMTMuNy0xMC4yLDIwLjUtMjQuNSwyMC41cy0yNC45LTguNy0yNC45LTI0Ljh2LTM1LjhoMTkuOVoiLz4KICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTc0Ni4zLDI4MC43aDUxLjJ2MTAuOGgtMTUuNnY0OS4zaC0xOS45di00OS4zaC0xNS42di0xMC44WiIvPgogICAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNODI4LjMsMjU2LjVjMCw1LjUtNC43LDEwLjItMTAuMiwxMC4ycy0xMC4yLTQuNy0xMC4yLTEwLjIsNC43LTEwLjIsMTAuMi0xMC4yLDEwLjIsNC43LDEwLjIsMTAuMlpNODA4LjEsMjgwLjdoMTkuOXY2MGgtMTkuOXYtNjBaIi8+CiAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik04NzEuOSwyODAuMWMxNywwLDMwLjYsMTMuNCwzMC42LDMwLjZzLTEzLjYsMzAuNi0zMC42LDMwLjYtMzAuNi0xMy40LTMwLjYtMzAuNiwxMy42LTMwLjYsMzAuNi0zMC42Wk04NzEuOSwzMzQuMWM4LjMsMCw5LjMtMTEuNiw5LjMtMjMuNHMtMS0yMy40LTkuMy0yMy40LTkuMywxMS42LTkuMywyMy40LDEsMjMuNCw5LjMsMjMuNFoiLz4KICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTk2MiwzMzEuM2MwLDUuMy0xLjEsMTAtNy4zLDEwcy02LjItMS41LTguMy01bC0yMS0zNGgtLjN2MzguNWgtMTB2LTQ5LjRjMC00LjgsMS0xMS4yLDEwLjQtMTEuMnM4LjksMi45LDExLjksNy43bDE0LjQsMjIuOGguM3YtMzAuNmgxMHY1MS4yWiIvPgogICAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMTAwMC43LDI4OS41Yy0zLDAtNi45LjMtNi45LDUsMCwxMS4xLDI2LjguOCwyNi44LDI1LjJzLTkuNCwyMS0yMS43LDIxaC0yMS42di04LjloMTYuOWM1LjUsMCw5LjEtLjQsOS4xLTcuMiwwLTExLjEtMjguOC0yLjEtMjguOC0yNC44czguOS0xOS4yLDIwLjgtMTkuMmgxOS4xdjguOWgtMTMuN1oiLz4KICA8L2c+CiAgPHJlY3QgY2xhc3M9ImNscy0xIiB4PSIxODkiIHk9IjEyIiB3aWR0aD0iNDAuNyIgaGVpZ2h0PSIxNjUuOSIvPgo8L3N2Zz4=" alt="Siri InfoSolutions Inc.">
+<div class="title"><h1>Staffing Intelligence Calculator</h1><p>Built for Sachin Soni’s Team | Siri InfoSolutions Inc.</p></div>
+<div class="spacer"></div>
+</header>
+<nav class="tabs">
+<button class="tab" id="itTab" onclick="showApp('it')">💻 IT / Non-IT Staffing</button>
+<button class="tab active" id="hcTab" onclick="showApp('hc')">🏥 Healthcare Staffing</button>
+</nav>
+<div class="frame-wrap">
+<iframe id="itFrame" class="hidden" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Siri Staffing Rate &amp; Margin Calculator&lt;/title&gt;
+&lt;style&gt;
+:root{
+ --bg:#f3f7fb;--card:#fff;--text:#182433;--muted:#657487;--border:#dbe5ee;
+ --navy:#123d63;--blue:#1769aa;--green:#16834b;--greenSoft:#edf9f2;
+ --amber:#a96f00;--amberSoft:#fff7df;--red:#c93636;--redSoft:#fff0f0;
+ --input:#f9fbfd;--shadow:0 14px 40px rgba(25,55,85,.10)
+}
+body.dark{
+ --bg:#101820;--card:#18232d;--text:#edf4fa;--muted:#9fb0bf;--border:#334554;
+ --navy:#7db7e5;--blue:#58a7e4;--input:#202e3a;--shadow:0 14px 40px rgba(0,0,0,.28)
+}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,var(--bg),#eaf1f7);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}
+body.dark{background:var(--bg)}
+.wrap{max-width:1180px;margin:24px auto;padding:0 14px 36px}
+.app{background:var(--card);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);padding:22px}
+.header{position:relative;display:flex;align-items:center;justify-content:center;min-height:76px;border-bottom:1px solid var(--border);padding-bottom:16px}
+.brand{text-align:center}
+.brand h1{margin:0;color:var(--navy);font-size:27px}
+.brand p{margin:6px 0 0;color:var(--muted);font-weight:600}
+.logo{position:absolute;left:0;font-weight:900;font-size:25px;color:var(--navy);letter-spacing:.04em}
+.theme{position:absolute;right:0;border:1px solid var(--border);background:var(--input);color:var(--text);padding:9px 12px;border-radius:9px;cursor:pointer;font-weight:700}
+.mode-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:18px 0}
+.mode-tab{border:1px solid var(--border);background:var(--input);color:var(--text);padding:13px;border-radius:10px;font-weight:800;cursor:pointer}
+.mode-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.section{margin-top:16px;padding:18px;border:1px solid var(--border);border-radius:15px;background:linear-gradient(135deg,var(--input),var(--card))}
+.eyebrow{font-size:10px;font-weight:900;letter-spacing:.13em;color:var(--blue);margin-bottom:6px}
+h2{margin:0 0 5px;color:var(--navy);font-size:21px}
+.helper{color:var(--muted);font-size:13px;line-height:1.5}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-top:15px}
+.field label{display:block;font-size:12px;font-weight:800;margin-bottom:6px;color:var(--text)}
+.field input,.field select{width:100%;padding:11px;border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--text);font-size:15px}
+.field small{display:block;color:var(--muted);font-size:10px;margin-top:5px;line-height:1.35}
+.fixed-strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.fixed{flex:1;min-width:145px;padding:9px 11px;border:1px solid var(--border);border-radius:9px;background:var(--card);display:flex;justify-content:space-between;align-items:center}
+.fixed span{font-size:10px;color:var(--muted);font-weight:700}.fixed strong{font-size:14px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:13px 0}
+.btn{border:0;padding:12px;border-radius:9px;font-weight:800;cursor:pointer}
+.reset{background:var(--navy);color:#fff}.print{background:var(--blue);color:#fff}
+.auto{text-align:center;color:var(--muted);font-size:12px;font-weight:700;margin-top:12px}
+.decision{margin:16px 0 0;padding:18px;border:2px solid var(--border);border-radius:13px;text-align:center;font-size:22px;font-weight:900}
+.decision small{display:block;font-size:14px;margin-top:6px}
+.good{background:var(--greenSoft);border-color:var(--green);color:var(--green)}
+.warn{background:var(--amberSoft);border-color:var(--amber);color:#795300}
+.stop{background:var(--redSoft);border-color:var(--red);color:var(--red)}
+.warning{display:none;margin-top:10px;padding:13px;border-radius:10px;background:var(--redSoft);border:1px solid var(--red);color:var(--red);font-weight:800}
+.results{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px}
+.metric{padding:14px;border:1px solid var(--border);border-radius:11px;background:var(--card)}
+.metric span{display:block;color:var(--muted);font-size:10px;font-weight:800}.metric strong{display:block;font-size:21px;margin-top:7px}
+.metric.hero{border:2px solid var(--green);background:var(--greenSoft)}.metric.hero strong{font-size:28px;color:var(--green)}
+.pitch{white-space:pre-line;line-height:1.7;padding:16px;border:1px solid var(--border);border-radius:11px;background:var(--card)}
+.copy{margin-top:10px;background:var(--blue);color:#fff;border:0;padding:10px 14px;border-radius:8px;font-weight:800;cursor:pointer}
+details{margin-top:15px;border:1px solid var(--border);border-radius:12px;background:var(--input);overflow:hidden}
+summary{padding:15px;font-weight:900;color:var(--navy);cursor:pointer}
+.details{padding:0 15px 15px}
+.foot{text-align:center;color:var(--muted);font-size:12px;margin-top:22px;padding-top:16px;border-top:1px solid var(--border)}
+.hidden{display:none!important}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);align-items:center;justify-content:center;padding:20px;z-index:50}
+.modal.show{display:flex}.modal-card{width:min(620px,96vw);background:var(--card);padding:22px;border-radius:16px}
+.modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.results{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:620px){.header{padding-top:60px}.logo{top:5px}.theme{top:5px}.brand h1{font-size:21px}.mode-tabs{grid-template-columns:repeat(2,1fr)}.grid,.results{grid-template-columns:1fr}.actions{grid-template-columns:1fr 1fr}}
+@media print{body{background:#fff}.theme,.actions,.auto,.mode-tabs,.copy{display:none!important}.app{box-shadow:none;border:0}.section,details{break-inside:avoid}details{display:block}details&gt;summary{display:none}.details{display:block!important}}
+
+.business-tabs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0 12px}
+.business-tab{display:flex;align-items:center;justify-content:center;gap:12px;padding:16px;border:1px solid var(--border);border-radius:13px;background:var(--input);color:var(--text);cursor:pointer;text-align:left;transition:.2s}
+.business-tab:hover{transform:translateY(-1px);box-shadow:0 5px 15px rgba(20,60,100,.08)}
+.business-tab.active{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;border-color:var(--navy)}
+.business-tab b{display:block;font-size:16px}.business-tab small{display:block;margin-top:4px;opacity:.8;font-size:11px}
+.tab-icon{font-size:25px}
+.employment-selector{display:flex;align-items:center;justify-content:center;gap:12px;padding:10px 14px;margin:0 auto 14px;border:1px solid var(--border);border-radius:11px;background:var(--input);width:max-content;max-width:100%}
+.selector-label{font-size:11px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.employment-buttons{display:flex;gap:6px}
+.employment-btn{padding:8px 18px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-weight:800;cursor:pointer}
+.employment-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+@media(max-width:620px){
+ .business-tabs{grid-template-columns:1fr}
+ .employment-selector{width:100%;flex-direction:column}
+ .employment-buttons{width:100%}.employment-btn{flex:1}
+}
+
+.company-logo{width:150px;height:58px;object-fit:contain;object-position:left center;font-size:0!important;letter-spacing:0!important}
+@media(max-width:620px){.company-logo{width:125px;height:48px}}
+
+.metric small{display:block;color:var(--muted);font-size:10px;margin-top:5px;line-height:1.3}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;wrap&quot;&gt;&lt;main class=&quot;app&quot;&gt;
+&lt;header class=&quot;header&quot;&gt;
+ &lt;img class=&quot;logo company-logo&quot; src=&quot;data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDEwODAgMzUxLjIiPgogIDxkZWZzPgogICAgPHN0eWxlPgogICAgICAuY2xzLTEgewogICAgICAgIGZpbGw6ICMzZjdmZjg7CiAgICAgIH0KCiAgICAgIC5jbHMtMSwgLmNscy0yIHsKICAgICAgICBzdHJva2Utd2lkdGg6IDBweDsKICAgICAgfQoKICAgICAgLmNscy0yIHsKICAgICAgICBmaWxsOiAjMzEzMTMxOwogICAgICB9CiAgICA8L3N0eWxlPgogIDwvZGVmcz4KICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0zNi45LDM1YzE2LjQtMTYuMywzNi4yLTI0LjQsNTkuNS0yNC40aDg2LjJ2MzUuN2gtODcuMmMtMTQuNSwwLTI2LjMsNS40LTM1LjQsMTYuMi03LjcsOS42LTExLjYsMjAuMi0xMS42LDMxLjlIMTIuMmMwLTIzLjQsOC4yLTQzLjIsMjQuNi01OS41Wk0xNzYuNSwxMjYuNmMtNCwxMC40LTkuOSwxOS41LTE3LjcsMjcuNC0xNi42LDE2LjItMzYuNCwyNC4zLTU5LjYsMjQuM0gxMy4xdi0zNS45aDg3LjJjMTQuNSwwLDI2LjMtNS40LDM1LjQtMTYuMiw3LjctOS42LDExLjYtMjAuMiwxMS42LTMxLjloMzUuMmMwLDExLjItMiwyMi02LDMyLjRaIi8+CiAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMjU5LjcsMzVjMTYuNC0xNi4zLDM2LjItMjQuNCw1OS41LTI0LjRoODYuMnYzNS43aC04Ny4yYy0xNC41LDAtMjYuMyw1LjQtMzUuNCwxNi4yLTcuNyw5LjYtMTEuNiwyMC4yLTExLjYsMzEuOWgtMzYuMWMwLTIzLjQsOC4yLTQzLjIsMjQuNi01OS41Wk0zOTkuNCwxMjYuNmMtNCwxMC40LTkuOSwxOS41LTE3LjcsMjcuNC0xNi42LDE2LjItMzYuNCwyNC4zLTU5LjYsMjQuM2gtODYuMnYtMzUuOWg4Ny4yYzE0LjUsMCwyNi4zLTUuNCwzNS40LTE2LjIsNy43LTkuNiwxMS42LTIwLjIsMTEuNi0zMS45aDM1LjJjMCwxMS4yLTIsMjItNiwzMi40WiIvPgogIDxnPgogICAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMjUuMiwzMTcuNWMzLjIsNi40LDguMywxMy42LDE2LjMsMTMuNnMxMS42LTQuMiwxMS42LTEwLjljMC0xNS44LTM5LTEyLjMtMzktNDEuMXMxMi42LTMwLjQsMzEtMzAuNCwyMyw1LjUsMzAuMywxNy42bC0xMC4xLDcuOWMtNC02LjktOC4yLTEzLjMtMTcuMi0xMy4zcy0xMC41LDQuNy0xMC41LDExLjNjMCwxNS42LDM5LjgsMTEuMiwzOS44LDQxLjFzLTE0LjEsMzAtMzIuNCwzMC0yNS4yLTUtMzIuNS0xOGwxMi42LTcuN1oiLz4KICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTExMS42LDI1Ni41YzAsNS41LTQuNywxMC4yLTEwLjIsMTAuMnMtMTAuMi00LjctMTAuMi0xMC4yLDQuNy0xMC4yLDEwLjItMTAuMiwxMC4yLDQuNywxMC4yLDEwLjJaTTkxLjQsMjgwLjdoMTkuOXY2MGgtMTkuOXYtNjBaIi8+CiAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0xMjkuMiwyODAuN2gzMS40YzEwLjUsMCwyMC4xLDYuOSwyMC4xLDE4LjNzLTMuNiwxMy4zLTExLjMsMTUuMmwxNy4zLDI2LjZoLTIyLjRsLTEzLjgtMjkuNWguM2M3LjMsMCwxMC4xLTQuNCwxMC4xLTExLjVzLTQuMy0xMC44LTkuNC0xMC44aC0yLjJ2NTEuN2gtMTkuOXYtNjBaIi8+CiAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0yMTYuNywyNTYuNWMwLDUuNS00LjcsMTAuMi0xMC4yLDEwLjJzLTEwLjItNC43LTEwLjItMTAuMiw0LjctMTAuMiwxMC4yLTEwLjIsMTAuMiw0LjcsMTAuMiwxMC4yWk0xOTYuNSwyODAuN2gxOS45djYwaC0xOS45di02MFoiLz4KICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTI3OS42LDI1MS4xaDI1LjJ2ODkuNmgtMjUuMnYtODkuNloiLz4KICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTM3MiwzMzEuM2MwLDUuMy0xLjEsMTAtNy4zLDEwcy02LjItMS41LTguMy01bC0yMS0zNGgtLjN2MzguNWgtMTB2LTQ5LjRjMC00LjgsMS0xMS4yLDEwLjQtMTEuMnM4LjksMi45LDExLjksNy43bDE0LjQsMjIuOGguM3YtMzAuNmgxMHY1MS4yWiIvPgogICAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMzkwLjYsMzQwLjd2LTgwLjljMC0xMC4yLDYuMi0xNS45LDE3LTE1LjloMTkuOXY4LjloLTEyYy01LDAtNSw0LTUsNy43djIwLjJoMTQuOHY5LjdoLTE0Ljh2NTAuNGgtMTkuOVoiLz4KICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTQ2MS4zLDI4MC4xYzE3LDAsMzAuNiwxMy40LDMwLjYsMzAuNnMtMTMuNiwzMC42LTMwLjYsMzAuNi0zMC42LTEzLjQtMzAuNi0zMC42LDEzLjYtMzAuNiwzMC42LTMwLjZaTTQ2MS4zLDMzNC4xYzguMywwLDkuMy0xMS42LDkuMy0yMy40cy0xLTIzLjQtOS4zLTIzLjQtOS4zLDExLjYtOS4zLDIzLjQsMSwyMy40LDkuMywyMy40WiIvPgogICAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNNTA4LjcsMzE3LjVjMy4yLDYuNCw4LjMsMTMuNiwxNi4zLDEzLjZzMTEuNi00LjIsMTEuNi0xMC45YzAtMTUuOC0zOS0xMi4zLTM5LTQxLjFzMTIuNi0zMC40LDMxLTMwLjQsMjMsNS41LDMwLjMsMTcuNmwtMTAuMSw3LjljLTQtNi45LTguMi0xMy4zLTE3LjItMTMuM3MtMTAuNSw0LjctMTAuNSwxMS4zYzAsMTUuNiwzOS44LDExLjIsMzkuOCw0MS4xcy0xNC4xLDMwLTMyLjQsMzAtMjUuMi01LTMyLjUtMThsMTIuNi03LjdaIi8+CiAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik02MDAuMywyODAuMWMxNywwLDMwLjYsMTMuNCwzMC42LDMwLjZzLTEzLjYsMzAuNi0zMC42LDMwLjYtMzAuNi0xMy40LTMwLjYtMzAuNiwxMy42LTMwLjYsMzAuNi0zMC42Wk02MDAuMywzMzQuMWM4LjMsMCw5LjMtMTEuNiw5LjMtMjMuNHMtMS0yMy40LTkuMy0yMy40LTkuMywxMS42LTkuMywyMy40LDEsMjMuNCw5LjMsMjMuNFoiLz4KICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTY2NC4xLDI0My45djc5LjdjMCw2LjIuOCw4LjMsNS4zLDguM2g4LjR2OC45aC0xOS44Yy05LjEsMC0xMy44LTMuNi0xMy44LTEydi04NC44aDE5LjlaIi8+CiAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik03MDcsMjgwLjd2MzUuN2MwLDcuMywxLjQsMTMuOCwxMC4xLDEzLjhzOS40LTQuOCw5LjQtMTAuN3YtMzguOWgxMHY0MC4xYzAsMTMuNy0xMC4yLDIwLjUtMjQuNSwyMC41cy0yNC45LTguNy0yNC45LTI0Ljh2LTM1LjhoMTkuOVoiLz4KICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTc0Ni4zLDI4MC43aDUxLjJ2MTAuOGgtMTUuNnY0OS4zaC0xOS45di00OS4zaC0xNS42di0xMC44WiIvPgogICAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNODI4LjMsMjU2LjVjMCw1LjUtNC43LDEwLjItMTAuMiwxMC4ycy0xMC4yLTQuNy0xMC4yLTEwLjIsNC43LTEwLjIsMTAuMi0xMC4yLDEwLjIsNC43LDEwLjIsMTAuMlpNODA4LjEsMjgwLjdoMTkuOXY2MGgtMTkuOXYtNjBaIi8+CiAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik04NzEuOSwyODAuMWMxNywwLDMwLjYsMTMuNCwzMC42LDMwLjZzLTEzLjYsMzAuNi0zMC42LDMwLjYtMzAuNi0xMy40LTMwLjYtMzAuNiwxMy42LTMwLjYsMzAuNi0zMC42Wk04NzEuOSwzMzQuMWM4LjMsMCw5LjMtMTEuNiw5LjMtMjMuNHMtMS0yMy40LTkuMy0yMy40LTkuMywxMS42LTkuMywyMy40LDEsMjMuNCw5LjMsMjMuNFoiLz4KICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTk2MiwzMzEuM2MwLDUuMy0xLjEsMTAtNy4zLDEwcy02LjItMS41LTguMy01bC0yMS0zNGgtLjN2MzguNWgtMTB2LTQ5LjRjMC00LjgsMS0xMS4yLDEwLjQtMTEuMnM4LjksMi45LDExLjksNy43bDE0LjQsMjIuOGguM3YtMzAuNmgxMHY1MS4yWiIvPgogICAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMTAwMC43LDI4OS41Yy0zLDAtNi45LjMtNi45LDUsMCwxMS4xLDI2LjguOCwyNi44LDI1LjJzLTkuNCwyMS0yMS43LDIxaC0yMS42di04LjloMTYuOWM1LjUsMCw5LjEtLjQsOS4xLTcuMiwwLTExLjEtMjguOC0yLjEtMjguOC0yNC44czguOS0xOS4yLDIwLjgtMTkuMmgxOS4xdjguOWgtMTMuN1oiLz4KICA8L2c+CiAgPHJlY3QgY2xhc3M9ImNscy0xIiB4PSIxODkiIHk9IjEyIiB3aWR0aD0iNDAuNyIgaGVpZ2h0PSIxNjUuOSIvPgo8L3N2Zz4=&quot; alt=&quot;Siri InfoSolutions Inc.&quot;&gt;
+ &lt;div class=&quot;brand&quot;&gt;&lt;h1&gt;Staffing Rate &amp; Margin Calculator&lt;/h1&gt;&lt;p&gt;Siri InfoSolutions Inc. · Staffing Pricing Intelligence&lt;/p&gt;&lt;/div&gt;
+ &lt;button class=&quot;theme&quot; onclick=&quot;toggleTheme()&quot;&gt;🌙 Night&lt;/button&gt;
+&lt;/header&gt;
+
+&lt;nav class=&quot;business-tabs&quot;&gt;
+ &lt;button class=&quot;business-tab active&quot; data-business=&quot;it&quot; onclick=&quot;setBusiness(&#x27;it&#x27;)&quot;&gt;
+   &lt;span class=&quot;tab-icon&quot;&gt;💻&lt;/span&gt;&lt;span&gt;&lt;b&gt;IT / Non-IT Staffing&lt;/b&gt;&lt;small&gt;W2 · C2C · 1099&lt;/small&gt;&lt;/span&gt;
+ &lt;/button&gt;
+ &lt;button class=&quot;business-tab&quot; data-business=&quot;healthcare&quot; onclick=&quot;setBusiness(&#x27;healthcare&#x27;)&quot;&gt;
+   &lt;span class=&quot;tab-icon&quot;&gt;🏥&lt;/span&gt;&lt;span&gt;&lt;b&gt;Healthcare Staffing&lt;/b&gt;&lt;small&gt;Travel Pay Package &amp; Margin&lt;/small&gt;&lt;/span&gt;
+ &lt;/button&gt;
+&lt;/nav&gt;
+
+&lt;div id=&quot;itTypeSelector&quot; class=&quot;employment-selector&quot;&gt;
+ &lt;span class=&quot;selector-label&quot;&gt;Employment Type&lt;/span&gt;
+ &lt;div class=&quot;employment-buttons&quot;&gt;
+  &lt;button class=&quot;employment-btn active&quot; data-mode=&quot;w2&quot; onclick=&quot;setMode(&#x27;w2&#x27;)&quot;&gt;W2&lt;/button&gt;
+  &lt;button class=&quot;employment-btn&quot; data-mode=&quot;c2c&quot; onclick=&quot;setMode(&#x27;c2c&#x27;)&quot;&gt;C2C&lt;/button&gt;
+  &lt;button class=&quot;employment-btn&quot; data-mode=&quot;1099&quot; onclick=&quot;setMode(&#x27;1099&#x27;)&quot;&gt;1099&lt;/button&gt;
+ &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;section id=&quot;itRtrDetails&quot; class=&quot;section it-only&quot;&gt;
+ &lt;div class=&quot;eyebrow&quot;&gt;RTR DETAILS&lt;/div&gt;
+ &lt;h2&gt;Candidate &amp; Client Information&lt;/h2&gt;
+ &lt;div class=&quot;helper&quot;&gt;These details are used to generate the default Right to Represent message and do not affect margin calculations.&lt;/div&gt;
+ &lt;div class=&quot;grid&quot; style=&quot;grid-template-columns:1fr 1fr&quot;&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;label&gt;Candidate Full Legal Name&lt;/label&gt;&lt;input id=&quot;rtrCandidateName&quot; type=&quot;text&quot; placeholder=&quot;Enter full legal name&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;label&gt;Client Name&lt;/label&gt;&lt;input id=&quot;rtrClientName&quot; type=&quot;text&quot; placeholder=&quot;Enter client name&quot;&gt;&lt;/div&gt;
+ &lt;/div&gt;
+&lt;/section&gt;
+
+&lt;section class=&quot;section&quot;&gt;
+ &lt;div class=&quot;eyebrow&quot;&gt;PACKAGE INPUTS&lt;/div&gt;&lt;h2&gt;Enter Assignment &amp; Pay Details&lt;/h2&gt;
+ &lt;div class=&quot;helper&quot;&gt;Choose the employment model and enter the deal terms. Margin, approval status, recruiter package, OT impact, and contract totals update automatically.&lt;/div&gt;
+ &lt;div class=&quot;grid&quot;&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;label&gt;Bill Rate ($/hr)&lt;/label&gt;&lt;input id=&quot;br&quot; type=&quot;number&quot; value=&quot;90&quot; step=&quot;.01&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;label id=&quot;payLabel&quot;&gt;Taxable Pay Rate ($/hr)&lt;/label&gt;&lt;input id=&quot;pr&quot; type=&quot;number&quot; value=&quot;60&quot; step=&quot;.01&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;field travel-only hidden&quot;&gt;&lt;label&gt;Weekly Stipend ($)&lt;/label&gt;&lt;input id=&quot;stipend&quot; type=&quot;number&quot; value=&quot;1240&quot; step=&quot;.01&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;label&gt;Regular Hours / Week&lt;/label&gt;&lt;input id=&quot;hours&quot; type=&quot;number&quot; value=&quot;40&quot; step=&quot;.01&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;field healthcare-only hidden&quot;&gt;&lt;label&gt;Contract Tenure (Weeks)&lt;/label&gt;&lt;input id=&quot;tenure&quot; type=&quot;number&quot; value=&quot;13&quot; min=&quot;1&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;label&gt;MSP / VMS Fee (%)&lt;/label&gt;&lt;input id=&quot;msp&quot; type=&quot;number&quot; value=&quot;6.5&quot; step=&quot;.01&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;field burden-field&quot;&gt;&lt;label id=&quot;burdenLabel&quot;&gt;W2 Payroll Burden (%)&lt;/label&gt;&lt;input id=&quot;burden&quot; type=&quot;number&quot; value=&quot;15&quot; step=&quot;.01&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;label&gt;Operational Cost ($/hr)&lt;/label&gt;&lt;input id=&quot;ops&quot; type=&quot;number&quot; value=&quot;2&quot; step=&quot;.01&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;label&gt;Desired Minimum Net Margin ($/hr)&lt;/label&gt;&lt;input id=&quot;desired&quot; type=&quot;number&quot; value=&quot;5&quot; step=&quot;.01&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;label&gt;OT Scenario&lt;/label&gt;&lt;select id=&quot;otMode&quot; onchange=&quot;toggleOT()&quot;&gt;&lt;option value=&quot;none&quot;&gt;No OT Expected&lt;/option&gt;&lt;option value=&quot;premium&quot;&gt;Client Pays OT Premium&lt;/option&gt;&lt;option value=&quot;straight&quot;&gt;Client Pays Straight Time Only&lt;/option&gt;&lt;option value=&quot;unpaid&quot;&gt;Client Does Not Pay OT&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;
+  &lt;div class=&quot;field ot-field hidden&quot;&gt;&lt;label&gt;Candidate OT Hours / Week&lt;/label&gt;&lt;input id=&quot;otHours&quot; type=&quot;number&quot; value=&quot;0&quot; step=&quot;.01&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;field ot-field hidden&quot;&gt;&lt;label&gt;Candidate OT Multiplier&lt;/label&gt;&lt;input id=&quot;otMult&quot; type=&quot;number&quot; value=&quot;1.5&quot; step=&quot;.01&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;field ot-field hidden&quot;&gt;&lt;label&gt;Client OT Multiplier&lt;/label&gt;&lt;input id=&quot;clientOtMult&quot; type=&quot;number&quot; value=&quot;1.5&quot; step=&quot;.01&quot;&gt;&lt;/div&gt;
+ &lt;/div&gt;
+ &lt;div class=&quot;fixed-strip&quot;&gt;
+  &lt;div class=&quot;fixed&quot;&gt;&lt;span&gt;EMPLOYMENT MODEL&lt;/span&gt;&lt;strong id=&quot;modelName&quot;&gt;W2&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;fixed&quot;&gt;&lt;span&gt;CALCULATION BASIS&lt;/span&gt;&lt;strong id=&quot;basisName&quot;&gt;Pay + Burden&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;fixed&quot;&gt;&lt;span&gt;AUTO UPDATE&lt;/span&gt;&lt;strong&gt;ON&lt;/strong&gt;&lt;/div&gt;
+ &lt;/div&gt;
+&lt;/section&gt;
+
+&lt;div class=&quot;auto&quot;&gt;⚡ Results update automatically as you change the package details.&lt;/div&gt;
+&lt;div class=&quot;actions&quot;&gt;&lt;button class=&quot;btn reset&quot; onclick=&quot;resetCalc()&quot;&gt;↻ Reset Calculator&lt;/button&gt;&lt;button class=&quot;btn print&quot; onclick=&quot;openPrint()&quot;&gt;🖨 Print / Save as PDF&lt;/button&gt;&lt;/div&gt;
+
+&lt;div id=&quot;decision&quot; class=&quot;decision good&quot;&gt;✅ PROCEED — Healthy Margin&lt;small&gt;Net Margin: $0.00/hr · 0.00%&lt;/small&gt;&lt;/div&gt;
+&lt;div id=&quot;otWarning&quot; class=&quot;warning&quot;&gt;&lt;/div&gt;
+
+&lt;section class=&quot;section&quot;&gt;
+ &lt;div class=&quot;eyebrow&quot;&gt;INTERNAL ONLY&lt;/div&gt;&lt;h2&gt;Margin &amp; Deal Snapshot&lt;/h2&gt;
+ &lt;div class=&quot;results&quot;&gt;
+  &lt;div class=&quot;metric hero&quot;&gt;&lt;span&gt;NET MARGIN / HOUR&lt;/span&gt;&lt;strong id=&quot;netMargin&quot;&gt;$0.00&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;metric&quot;&gt;&lt;span&gt;GROSS MARGIN / HOUR&lt;/span&gt;&lt;strong id=&quot;grossMargin&quot;&gt;$0.00&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;metric&quot;&gt;&lt;span&gt;NET MARGIN %&lt;/span&gt;&lt;strong id=&quot;netPct&quot;&gt;0.00%&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;metric&quot;&gt;&lt;span&gt;WEEKLY NET MARGIN&lt;/span&gt;&lt;strong id=&quot;weeklyMargin&quot;&gt;$0.00&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;metric healthcare-only hidden&quot;&gt;&lt;span&gt;CONTRACT NET MARGIN&lt;/span&gt;&lt;strong id=&quot;contractMargin&quot;&gt;$0.00&lt;/strong&gt;&lt;/div&gt;
+ &lt;/div&gt;
+&lt;/section&gt;
+
+&lt;section class=&quot;section&quot;&gt;
+ &lt;div class=&quot;eyebrow&quot;&gt;RECRUITER VIEW&lt;/div&gt;&lt;h2&gt;Candidate Package Snapshot&lt;/h2&gt;
+ &lt;div class=&quot;results&quot;&gt;
+  &lt;div class=&quot;metric&quot;&gt;&lt;span id=&quot;rPayLabel&quot;&gt;PAY RATE&lt;/span&gt;&lt;strong id=&quot;rPay&quot;&gt;$0.00/hr&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;metric travel-only hidden&quot;&gt;&lt;span&gt;WEEKLY STIPEND&lt;/span&gt;&lt;strong id=&quot;rStipend&quot;&gt;$0.00&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;metric healthcare-only hidden&quot;&gt;&lt;span&gt;GROSS WEEKLY PACKAGE&lt;/span&gt;&lt;strong id=&quot;rWeekly&quot;&gt;$0.00&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;metric&quot;&gt;&lt;span&gt;HOURS / WEEK&lt;/span&gt;&lt;strong id=&quot;rHours&quot;&gt;0&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;metric healthcare-only hidden&quot;&gt;&lt;span&gt;ASSIGNMENT TENURE&lt;/span&gt;&lt;strong id=&quot;rTenure&quot;&gt;13 weeks&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;metric healthcare-only hidden&quot;&gt;&lt;span&gt;EST. CONTRACT EARNINGS&lt;/span&gt;&lt;strong id=&quot;rContract&quot;&gt;$0.00&lt;/strong&gt;&lt;/div&gt;
+ &lt;/div&gt;
+&lt;/section&gt;
+
+&lt;section class=&quot;section&quot;&gt;
+ &lt;div class=&quot;eyebrow&quot;&gt;READY TO USE&lt;/div&gt;&lt;h2 id=&quot;messageHeading&quot;&gt;📄 Right to Represent (RTR)&lt;/h2&gt;
+ &lt;div id=&quot;pitch&quot; class=&quot;pitch&quot;&gt;&lt;/div&gt;
+ &lt;button class=&quot;copy&quot; onclick=&quot;copyPitch()&quot;&gt;&lt;span id=&quot;copyButtonText&quot;&gt;Copy RTR&lt;/span&gt;&lt;/button&gt;
+ &lt;span id=&quot;copyStatus&quot; class=&quot;helper&quot;&gt;&lt;/span&gt;
+&lt;/section&gt;
+
+&lt;details&gt;
+ &lt;summary&gt;📊 Internal Financial Details&lt;/summary&gt;
+ &lt;div class=&quot;details&quot;&gt;&lt;div class=&quot;results&quot;&gt;
+  &lt;div class=&quot;metric&quot;&gt;&lt;span&gt;MSP FEE DEDUCTION / HR&lt;/span&gt;&lt;strong id=&quot;mspHr&quot;&gt;$0.00&lt;/strong&gt;&lt;small id=&quot;mspCalcNote&quot;&gt;Based on MSP fee %&lt;/small&gt;&lt;/div&gt;
+  &lt;div class=&quot;metric&quot;&gt;&lt;span&gt;NET BILL RATE&lt;/span&gt;&lt;strong id=&quot;netBr&quot;&gt;$0.00&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;metric&quot;&gt;&lt;span&gt;PAYROLL BURDEN / HR&lt;/span&gt;&lt;strong id=&quot;burdenHr&quot;&gt;$0.00&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;metric travel-only hidden&quot;&gt;&lt;span&gt;STIPEND COST / HR&lt;/span&gt;&lt;strong id=&quot;stipendHr&quot;&gt;$0.00&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;metric&quot;&gt;&lt;span&gt;TOTAL CANDIDATE COST / HR&lt;/span&gt;&lt;strong id=&quot;totalCostHr&quot;&gt;$0.00&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;metric&quot;&gt;&lt;span&gt;MAX PAY RATE AT TARGET&lt;/span&gt;&lt;strong id=&quot;maxPay&quot;&gt;$0.00/hr&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;metric healthcare-only hidden&quot;&gt;&lt;span&gt;TOTAL CONTRACT REVENUE&lt;/span&gt;&lt;strong id=&quot;contractRevenue&quot;&gt;$0.00&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;metric healthcare-only hidden&quot;&gt;&lt;span&gt;TOTAL CANDIDATE COST&lt;/span&gt;&lt;strong id=&quot;contractCost&quot;&gt;$0.00&lt;/strong&gt;&lt;/div&gt;
+ &lt;/div&gt;&lt;/div&gt;
+&lt;/details&gt;
+
+&lt;details class=&quot;travel-only hidden&quot;&gt;
+ &lt;summary&gt;📘 Healthcare Travel &amp; Stipend Notes&lt;/summary&gt;
+ &lt;div class=&quot;details helper&quot;&gt;Keep taxable hourly pay and weekly stipend separate when communicating the package. Non-taxable stipend treatment depends on traveler eligibility, tax-home requirements, assignment facts, and company compliance review. A location-based GSA reference does not by itself establish tax-free eligibility.&lt;/div&gt;
+&lt;/details&gt;
+
+&lt;footer class=&quot;foot&quot;&gt;Designed &amp; Developed by &lt;strong&gt;Sachin Soni&lt;/strong&gt;&lt;/footer&gt;
+&lt;/main&gt;&lt;/div&gt;
+
+&lt;div id=&quot;printModal&quot; class=&quot;modal&quot;&gt;
+ &lt;div class=&quot;modal-card&quot;&gt;
+  &lt;div class=&quot;eyebrow&quot;&gt;PDF IDENTIFICATION&lt;/div&gt;&lt;h2&gt;Prepare Deal Summary&lt;/h2&gt;
+  &lt;p class=&quot;helper&quot;&gt;Candidate and Client/Facility names are required only for Print / Save as PDF. They do not affect calculations.&lt;/p&gt;
+  &lt;div id=&quot;printError&quot; class=&quot;warning&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;grid&quot; style=&quot;grid-template-columns:1fr 1fr&quot;&gt;
+   &lt;div class=&quot;field&quot;&gt;&lt;label&gt;Candidate Name&lt;/label&gt;&lt;input id=&quot;candidateName&quot; type=&quot;text&quot;&gt;&lt;/div&gt;
+   &lt;div class=&quot;field&quot;&gt;&lt;label&gt;Client / Facility Name&lt;/label&gt;&lt;input id=&quot;clientName&quot; type=&quot;text&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;modal-actions&quot;&gt;&lt;button class=&quot;btn reset&quot; onclick=&quot;closePrint()&quot;&gt;Cancel&lt;/button&gt;&lt;button class=&quot;btn print&quot; onclick=&quot;doPrint()&quot;&gt;Print / Save as PDF&lt;/button&gt;&lt;/div&gt;
+ &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+const $=id=&gt;document.getElementById(id);
+const money=n=&gt;&#x27;$&#x27;+(Number(n)||0).toLocaleString(&#x27;en-US&#x27;,{minimumFractionDigits:2,maximumFractionDigits:2});
+let mode=&#x27;w2&#x27;;
+let business=&#x27;it&#x27;;
+
+function setBusiness(b){
+ business=b;
+ document.querySelectorAll(&#x27;.business-tab&#x27;).forEach(x=&gt;x.classList.toggle(&#x27;active&#x27;,x.dataset.business===b));
+ $(&#x27;itTypeSelector&#x27;).classList.toggle(&#x27;hidden&#x27;,b!==&#x27;it&#x27;);
+ document.querySelectorAll(&#x27;.healthcare-only&#x27;).forEach(x=&gt;x.classList.toggle(&#x27;hidden&#x27;,b!==&#x27;healthcare&#x27;));
+ if(b===&#x27;healthcare&#x27;){
+   $(&#x27;msp&#x27;).value=6.5;
+   $(&#x27;itRtrDetails&#x27;).classList.add(&#x27;hidden&#x27;);
+   $(&#x27;messageHeading&#x27;).textContent=&#x27;📣 Candidate Pay Package Message&#x27;;
+   $(&#x27;copyButtonText&#x27;).textContent=&#x27;Copy Candidate Message&#x27;;
+   setMode(&#x27;travel&#x27;);
+ }else{
+   $(&#x27;msp&#x27;).value=2.5;
+   $(&#x27;itRtrDetails&#x27;).classList.remove(&#x27;hidden&#x27;);
+   $(&#x27;messageHeading&#x27;).textContent=&#x27;📄 Right to Represent (RTR)&#x27;;
+   $(&#x27;copyButtonText&#x27;).textContent=&#x27;Copy RTR&#x27;;
+   setMode(mode===&#x27;travel&#x27;?&#x27;w2&#x27;:mode);
+ }
+}
+function setMode(m){
+ mode=m;
+ document.querySelectorAll(&#x27;.employment-btn&#x27;).forEach(x=&gt;x.classList.toggle(&#x27;active&#x27;,x.dataset.mode===m));
+ document.querySelectorAll(&#x27;.travel-only&#x27;).forEach(x=&gt;x.classList.toggle(&#x27;hidden&#x27;,m!==&#x27;travel&#x27;));
+ if(business===&#x27;healthcare&#x27;) document.querySelectorAll(&#x27;.healthcare-only&#x27;).forEach(x=&gt;x.classList.remove(&#x27;hidden&#x27;));
+ const burden=$(&#x27;burden&#x27;), hours=$(&#x27;hours&#x27;), pr=$(&#x27;pr&#x27;);
+ if(m===&#x27;w2&#x27;){ $(&#x27;modelName&#x27;).textContent=&#x27;W2&#x27;;$(&#x27;basisName&#x27;).textContent=&#x27;Pay + Burden&#x27;;$(&#x27;payLabel&#x27;).textContent=&#x27;Taxable Pay Rate ($/hr)&#x27;;$(&#x27;rPayLabel&#x27;).textContent=&#x27;TAXABLE PAY RATE&#x27;;burden.value=15;hours.value=40;pr.value=60; }
+ if(m===&#x27;c2c&#x27;){ $(&#x27;modelName&#x27;).textContent=&#x27;C2C&#x27;;$(&#x27;basisName&#x27;).textContent=&#x27;C2C Rate&#x27;;$(&#x27;payLabel&#x27;).textContent=&#x27;C2C Pay Rate ($/hr)&#x27;;$(&#x27;rPayLabel&#x27;).textContent=&#x27;C2C PAY RATE&#x27;;burden.value=0;hours.value=40;pr.value=70; }
+ if(m===&#x27;1099&#x27;){ $(&#x27;modelName&#x27;).textContent=&#x27;1099&#x27;;$(&#x27;basisName&#x27;).textContent=&#x27;Contractor Rate&#x27;;$(&#x27;payLabel&#x27;).textContent=&#x27;1099 Pay Rate ($/hr)&#x27;;$(&#x27;rPayLabel&#x27;).textContent=&#x27;1099 PAY RATE&#x27;;burden.value=0;hours.value=40;pr.value=65; }
+ if(m===&#x27;travel&#x27;){ $(&#x27;modelName&#x27;).textContent=&#x27;Healthcare Travel&#x27;;$(&#x27;basisName&#x27;).textContent=&#x27;Taxable + Stipend&#x27;;$(&#x27;payLabel&#x27;).textContent=&#x27;Taxable Pay Rate ($/hr)&#x27;;$(&#x27;rPayLabel&#x27;).textContent=&#x27;TAXABLE PAY RATE&#x27;;burden.value=15;hours.value=36;pr.value=37; }
+ calculate();
+}
+function toggleOT(){
+ document.querySelectorAll(&#x27;.ot-field&#x27;).forEach(x=&gt;x.classList.toggle(&#x27;hidden&#x27;,$(&#x27;otMode&#x27;).value===&#x27;none&#x27;));
+ if($(&#x27;otMode&#x27;).value===&#x27;none&#x27;) $(&#x27;otHours&#x27;).value=0;
+ if($(&#x27;otMode&#x27;).value===&#x27;premium&#x27;) $(&#x27;clientOtMult&#x27;).value=1.5;
+ if($(&#x27;otMode&#x27;).value===&#x27;straight&#x27;) $(&#x27;clientOtMult&#x27;).value=1;
+ if($(&#x27;otMode&#x27;).value===&#x27;unpaid&#x27;) $(&#x27;clientOtMult&#x27;).value=0;
+ calculate();
+}
+function calculate(){
+ const br=+$(&#x27;br&#x27;).value||0, pr=+$(&#x27;pr&#x27;).value||0, hrs=+$(&#x27;hours&#x27;).value||0, tenure=+$(&#x27;tenure&#x27;).value||0;
+ const msp=+$(&#x27;msp&#x27;).value||0, burdenPct=+$(&#x27;burden&#x27;).value||0, ops=+$(&#x27;ops&#x27;).value||0, desired=+$(&#x27;desired&#x27;).value||0;
+ const stipend=mode===&#x27;travel&#x27;?(+$(&#x27;stipend&#x27;).value||0):0;
+ const otHours=+$(&#x27;otHours&#x27;).value||0, otMult=+$(&#x27;otMult&#x27;).value||1.5, clientMult=+$(&#x27;clientOtMult&#x27;).value||0;
+ const mspHr=br*msp/100, netBr=br-mspHr, burdenHr=pr*burdenPct/100, stipendHr=hrs?stipend/hrs:0;
+ const totalCostHr=pr+burdenHr+stipendHr;
+ const grossMargin=netBr-totalCostHr, netMargin=grossMargin-ops, netPct=netBr?netMargin/netBr*100:0;
+ const candOtBase=pr*otMult*(1+burdenPct/100);
+ const clientOtRevenue=br*clientMult*(1-msp/100);
+ const otMarginHr=clientOtRevenue-candOtBase-ops;
+ const weeklyMargin=netMargin*hrs+(otHours?otMarginHr*otHours:0);
+ const contractMargin=weeklyMargin*tenure;
+ const weeklyPackage=pr*hrs+stipend+(otHours?pr*otMult*otHours:0);
+ const contractEarnings=weeklyPackage*tenure;
+ const contractRevenue=(netBr*hrs+clientOtRevenue*otHours)*tenure;
+ const contractCost=((totalCostHr*hrs)+(candOtBase*otHours))*tenure;
+ const divisor=1+burdenPct/100;
+ const maxPay=Math.max(0,(netBr-ops-desired-stipendHr)/divisor);
+
+ $(&#x27;netMargin&#x27;).textContent=money(netMargin);
+ $(&#x27;grossMargin&#x27;).textContent=money(grossMargin);
+ $(&#x27;netPct&#x27;).textContent=netPct.toFixed(2)+&#x27;%&#x27;;
+ $(&#x27;weeklyMargin&#x27;).textContent=money(weeklyMargin);
+ $(&#x27;contractMargin&#x27;).textContent=money(contractMargin);
+ $(&#x27;mspHr&#x27;).textContent=money(mspHr);$(&#x27;mspCalcNote&#x27;).textContent=msp.toFixed(2)+&#x27;% of Bill Rate&#x27;;$(&#x27;netBr&#x27;).textContent=money(netBr);$(&#x27;burdenHr&#x27;).textContent=money(burdenHr);
+ $(&#x27;stipendHr&#x27;).textContent=money(stipendHr);$(&#x27;totalCostHr&#x27;).textContent=money(totalCostHr);$(&#x27;maxPay&#x27;).textContent=money(maxPay)+&#x27;/hr&#x27;;
+ $(&#x27;contractRevenue&#x27;).textContent=money(contractRevenue);$(&#x27;contractCost&#x27;).textContent=money(contractCost);
+ $(&#x27;rPay&#x27;).textContent=money(pr)+&#x27;/hr&#x27;;$(&#x27;rStipend&#x27;).textContent=money(stipend);$(&#x27;rWeekly&#x27;).textContent=money(weeklyPackage);
+ $(&#x27;rHours&#x27;).textContent=hrs.toFixed(0)+&#x27; hours&#x27;;$(&#x27;rTenure&#x27;).textContent=tenure.toFixed(0)+&#x27; weeks&#x27;;$(&#x27;rContract&#x27;).textContent=money(contractEarnings);
+
+ const d=$(&#x27;decision&#x27;);
+ if(netMargin&gt;=7){d.className=&#x27;decision good&#x27;;d.innerHTML=&#x27;✅ PROCEED — Healthy Margin&lt;small&gt;Net Margin: &#x27;+money(netMargin)+&#x27;/hr · &#x27;+netPct.toFixed(2)+&#x27;%&lt;/small&gt;&#x27;}
+ else if(netMargin&gt;=5){d.className=&#x27;decision warn&#x27;;d.innerHTML=&#x27;⚠️ MANAGER APPROVAL REQUIRED&lt;small&gt;Net Margin: &#x27;+money(netMargin)+&#x27;/hr · &#x27;+netPct.toFixed(2)+&#x27;%&lt;/small&gt;&#x27;}
+ else{d.className=&#x27;decision stop&#x27;;d.innerHTML=&#x27;⛔ DO NOT PROCEED — Margin Below Minimum&lt;small&gt;Net Margin: &#x27;+money(netMargin)+&#x27;/hr · &#x27;+netPct.toFixed(2)+&#x27;%&lt;/small&gt;&#x27;}
+
+ const ow=$(&#x27;otWarning&#x27;);
+ if(otHours&gt;0 &amp;&amp; otMarginHr&lt;0){ow.style.display=&#x27;block&#x27;;ow.innerHTML=&#x27;⚠️ OT MARGIN WARNING — Each OT hour reduces margin by &#x27;+money(Math.abs(otMarginHr))+&#x27;. Weekly OT impact at &#x27;+otHours+&#x27; hours: -&#x27;+money(Math.abs(otMarginHr*otHours))+&#x27;.&#x27;}
+ else if(otHours&gt;0 &amp;&amp; $(&#x27;otMode&#x27;).value!==&#x27;premium&#x27;){ow.style.display=&#x27;block&#x27;;ow.innerHTML=&#x27;⚠️ OT REVIEW — Candidate OT cost is &#x27;+money(candOtBase)+&#x27;/hr while client OT revenue is &#x27;+money(clientOtRevenue)+&#x27;/hr. OT margin impact: &#x27;+money(otMarginHr)+&#x27;/hr.&#x27;}
+ else{ow.style.display=&#x27;none&#x27;;ow.innerHTML=&#x27;&#x27;}
+
+ let pitch;
+ if(mode===&#x27;travel&#x27;){
+  pitch=`Hi,\n\nThe pay package for this opportunity is:\n\n• Taxable Pay: ${money(pr)}/hour on W2\n• Weekly Non-Taxable Stipend: ${money(stipend)}*\n• Gross Weekly Package: ${money(weeklyPackage)} based on ${hrs.toFixed(0)} regular hours/week\n• Assignment Duration: ${tenure.toFixed(0)} weeks\n• Estimated Gross Contract Earnings: ${money(contractEarnings)}\n\nPlease let me know if this package works for you and we can discuss the next steps.\n\n*Non-taxable stipend is available to eligible travelers based on applicable tax-home and assignment requirements.`;
+ } else {
+  const type=mode===&#x27;w2&#x27;?&#x27;W2&#x27;:mode===&#x27;c2c&#x27;?&#x27;C2C&#x27;:&#x27;1099&#x27;;
+  const fullName=($(&#x27;rtrCandidateName&#x27;).value||&#x27;[Candidate Full Legal Name]&#x27;).trim();
+  const clientName=($(&#x27;rtrClientName&#x27;).value||&#x27;[Client Name]&#x27;).trim();
+  pitch=`Right to Represent (RTR)\n\nI, ${fullName}, hereby authorize Siri InfoSolutions Inc. to represent and submit my profile for the opportunity with ${clientName} at a pay rate of ${money(pr)}/hour on ${type}.\n\nI confirm that I have not authorized any other staffing agency or recruiter to represent or submit my profile for the same position with ${clientName}. I will not authorize any other agency or recruiter to submit my profile for this same position after providing this authorization.\n\nI confirm that the information provided in my resume and during the recruitment process is accurate to the best of my knowledge.\n\nFull Legal Name: ${fullName}\nClient Name: ${clientName}\nPay Rate: ${money(pr)}/hour on ${type}\n\nPlease reply with “I Agree” to confirm this Right to Represent authorization.`;
+ }
+ $(&#x27;pitch&#x27;).textContent=pitch;
+}
+function copyPitch(){navigator.clipboard.writeText($(&#x27;pitch&#x27;).textContent).then(()=&gt;{$(&#x27;copyStatus&#x27;).textContent=&#x27; Copied!&#x27;;setTimeout(()=&gt;$(&#x27;copyStatus&#x27;).textContent=&#x27;&#x27;,1600)})}
+function resetCalc(){
+  // Common defaults
+  $(&#x27;br&#x27;).value=90;
+  $(&#x27;hours&#x27;).value=business===&#x27;healthcare&#x27;?36:40;
+  $(&#x27;tenure&#x27;).value=13;
+  $(&#x27;msp&#x27;).value=business===&#x27;healthcare&#x27;?6.5:2.5;
+  $(&#x27;burden&#x27;).value=(business===&#x27;healthcare&#x27;||mode===&#x27;w2&#x27;)?15:0;
+  $(&#x27;ops&#x27;).value=2;
+  $(&#x27;desired&#x27;).value=5;
+  $(&#x27;otMode&#x27;).value=&#x27;none&#x27;;
+  $(&#x27;otHours&#x27;).value=0;
+  $(&#x27;otMult&#x27;).value=1.5;
+  $(&#x27;clientOtMult&#x27;).value=1.5;
+  $(&#x27;stipend&#x27;).value=1240;
+  if($(&#x27;rtrCandidateName&#x27;)) $(&#x27;rtrCandidateName&#x27;).value=&#x27;&#x27;;
+  if($(&#x27;rtrClientName&#x27;)) $(&#x27;rtrClientName&#x27;).value=&#x27;&#x27;;
+  if($(&#x27;candidateName&#x27;)) $(&#x27;candidateName&#x27;).value=&#x27;&#x27;;
+  if($(&#x27;clientName&#x27;)) $(&#x27;clientName&#x27;).value=&#x27;&#x27;;
+
+  if(business===&#x27;healthcare&#x27;){
+    mode=&#x27;travel&#x27;;
+    $(&#x27;pr&#x27;).value=37;
+    document.querySelectorAll(&#x27;.travel-only&#x27;).forEach(x=&gt;x.classList.remove(&#x27;hidden&#x27;));
+    document.querySelectorAll(&#x27;.healthcare-only&#x27;).forEach(x=&gt;x.classList.remove(&#x27;hidden&#x27;));
+  }else{
+    if(mode===&#x27;travel&#x27;) mode=&#x27;w2&#x27;;
+    if(mode===&#x27;w2&#x27;) $(&#x27;pr&#x27;).value=60;
+    if(mode===&#x27;c2c&#x27;) $(&#x27;pr&#x27;).value=70;
+    if(mode===&#x27;1099&#x27;) $(&#x27;pr&#x27;).value=65;
+    document.querySelectorAll(&#x27;.travel-only&#x27;).forEach(x=&gt;x.classList.add(&#x27;hidden&#x27;));
+    document.querySelectorAll(&#x27;.healthcare-only&#x27;).forEach(x=&gt;x.classList.add(&#x27;hidden&#x27;));
+    document.querySelectorAll(&#x27;.employment-btn&#x27;).forEach(x=&gt;x.classList.toggle(&#x27;active&#x27;,x.dataset.mode===mode));
+  }
+  document.querySelectorAll(&#x27;.ot-field&#x27;).forEach(x=&gt;x.classList.add(&#x27;hidden&#x27;));
+  calculate();
+}
+function toggleTheme(){document.body.classList.toggle(&#x27;dark&#x27;);document.querySelector(&#x27;.theme&#x27;).textContent=document.body.classList.contains(&#x27;dark&#x27;)?&#x27;☀️ Day&#x27;:&#x27;🌙 Night&#x27;}
+function openPrint(){$(&#x27;printModal&#x27;).classList.add(&#x27;show&#x27;);$(&#x27;printError&#x27;).style.display=&#x27;none&#x27;}
+function closePrint(){$(&#x27;printModal&#x27;).classList.remove(&#x27;show&#x27;)}
+function doPrint(){
+ const c=$(&#x27;candidateName&#x27;).value.trim(),cl=$(&#x27;clientName&#x27;).value.trim();
+ if(!c||!cl){$(&#x27;printError&#x27;).style.display=&#x27;block&#x27;;$(&#x27;printError&#x27;).textContent=&#x27;Candidate Name and Client / Facility Name are required for PDF output.&#x27;;return}
+ document.querySelectorAll(&#x27;details&#x27;).forEach(d=&gt;d.open=true);closePrint();setTimeout(()=&gt;window.print(),150)
+}
+document.querySelectorAll(&#x27;input&#x27;).forEach(x=&gt;x.addEventListener(&#x27;input&#x27;,calculate));
+document.querySelectorAll(&#x27;select&#x27;).forEach(x=&gt;x.addEventListener(&#x27;change&#x27;,calculate));
+setBusiness(&#x27;it&#x27;);
+&lt;/script&gt;
+&lt;script&gt;
+(function(){
+ const send=()=&gt;parent.postMessage({type:&#x27;calcHeight&#x27;,height:document.documentElement.scrollHeight},&#x27;*&#x27;);
+ new ResizeObserver(send).observe(document.body);
+ window.addEventListener(&#x27;load&#x27;,send);
+ setTimeout(send,300); setTimeout(send,1000);
+})();
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" title="IT and Non-IT Staffing Calculator"></iframe>
+<iframe id="hcFrame" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;&lt;title&gt;Medefis Calculator through Siri Health&lt;/title&gt;&lt;style&gt;
 :root{--bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#657184;--p:#123f70;--border:#dce4ed;--input:#fff;--good:#16834b;--bad:#c62828}body.dark{--bg:#0e1722;--card:#172331;--text:#eef4f8;--muted:#afbac6;--p:#62adeb;--border:#344556;--input:#202f40;--good:#63d99a;--bad:#ff7777}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif;transition:.25s}.wrap{max-width:1050px;margin:28px auto;padding:0 18px}.card{background:var(--card);padding:18px;border:1px solid var(--border);border-radius:16px;box-shadow:0 8px 28px #0001}.head{display:flex;justify-content:space-between;align-items:center;gap:15px}.brand{display:flex;align-items:center;gap:16px}.brand img{max-height:70px;max-width:190px}.brand h1{margin:0;color:var(--p);font-size:26px}.sub{color:var(--muted);margin-top:5px}.theme,.calc{border:0;border-radius:9px;font-weight:700;cursor:pointer}.theme{padding:10px 14px;background:var(--input);color:var(--text);border:1px solid var(--border)}.calc{width:100%;padding:13px;background:var(--p);color:#fff;font-size:16px;margin-top:18px}.inputs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}.field label{display:block;font-weight:700;margin-bottom:7px}.field small{display:block;color:var(--muted);margin-top:5px}.checkrow{display:flex;align-items:center;gap:10px;padding:10px 0}.checkrow input{width:auto;transform:scale(1.25)}input{width:100%;padding:11px;border:1px solid var(--border);border-radius:8px;background:var(--input);color:var(--text);font-size:15px}input[readonly]{opacity:.72;cursor:not-allowed;font-weight:700}h2{color:var(--p);margin:18px 0 10px}.results{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.metric{padding:14px;border:1px solid var(--border);border-radius:10px;background:var(--input)}.metric span{display:block;color:var(--muted);font-size:13px;margin-bottom:7px}.metric strong{font-size:20px}.good{color:var(--good)}.bad{color:var(--bad)}
 .hero-metric{border:2px solid var(--p);padding:18px;box-shadow:0 5px 16px #0002}
 .hero-metric strong{font-size:28px;display:block}
@@ -137,8 +548,8 @@ body.dark .pitch-modern{background:#1c2936}
   .print-identity-banner span{display:block;font-size:10px;color:#667}
   .print-identity-banner strong{display:block;font-size:16px;margin-top:3px}
   details{display:block!important}
-  details>summary{display:none!important}
-  details>.guide-content{display:block!important}
+  details&gt;summary{display:none!important}
+  details&gt;.guide-content{display:block!important}
   .guide-box{overflow:visible!important;border:1px solid #ddd!important}
   .print-modal{display:none!important}
   body{background:#fff!important}
@@ -227,7 +638,7 @@ body.dark .package-entry-section{
 /* Center calculator title and company name while keeping logo and theme controls */
 .head{position:relative}
 .head .brand{width:100%;justify-content:center!important;text-align:center!important}
-.head .brand>div{text-align:center!important}
+.head .brand&gt;div{text-align:center!important}
 .head .brand h1{text-align:center!important}
 .head .brand .sub{text-align:center!important}
 .head .brand img{position:absolute;left:0}
@@ -244,308 +655,370 @@ body.dark .package-entry-section{
 @media(max-width:600px){.decision-card b{font-size:19px}.decision-metrics{font-size:13px}}
 
 #marginWarning{display:none!important}
-</style></head><body><div class="wrap"><div class="card"><div class="head"><div class="brand"><img src="https://cdn.prod.website-files.com/6540650aa6e7078f6b1d4dec/65435574bb3a988c6321cce0_SH%20Logo1a.webp" alt="Siri Health"><div><h1>Medefis Pay Package &amp; Margin Calculator</h1><div class="sub">Siri HealthCare Services Inc.</div></div></div><button class="theme" id="theme" onclick="toggleTheme()">🌙 Night</button></div>
-<section class="package-entry-section">
-<div class="section-head">
-  <div>
-    <div class="eyebrow">PACKAGE INPUTS</div>
-    <h2>Enter Pay Package Details</h2>
-  </div>
-</div>
-<div class="entry-helper">Enter the assignment rates and package details below. Results, margin status, and candidate package information will update automatically.</div>
-<div class="inputs primary-rate-inputs">
-<div class="field"><label>Bill Rate ($/hr)</label><input id="br" type="number" step=".01" value="90"></div>
 
-<div class="field"><label>Pay Rate ($/hr)</label><input id="pr" type="number" step=".01" value="37"></div>
+.rtr-intro{color:var(--muted);font-size:13px;line-height:1.5;margin-bottom:12px}
+.rtr-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.rtr-fields .field label{display:block;font-size:12px;font-weight:800;margin-bottom:6px}
+.rtr-fields input{width:100%;padding:11px;border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--text)}
+@media(max-width:650px){.rtr-fields{grid-template-columns:1fr}}
+&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;wrap&quot;&gt;&lt;div class=&quot;card&quot;&gt;&lt;div class=&quot;head&quot;&gt;&lt;div class=&quot;brand&quot;&gt;&lt;img src=&quot;https://cdn.prod.website-files.com/6540650aa6e7078f6b1d4dec/65435574bb3a988c6321cce0_SH%20Logo1a.webp&quot; alt=&quot;Siri Health&quot;&gt;&lt;div&gt;&lt;h1&gt;Medefis Pay Package &amp;amp; Margin Calculator&lt;/h1&gt;&lt;div class=&quot;sub&quot;&gt;Siri HealthCare Services Inc.&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;button class=&quot;theme&quot; id=&quot;theme&quot; onclick=&quot;toggleTheme()&quot;&gt;🌙 Night&lt;/button&gt;&lt;/div&gt;
+&lt;section class=&quot;package-entry-section&quot;&gt;
+&lt;div class=&quot;section-head&quot;&gt;
+  &lt;div&gt;
+    &lt;div class=&quot;eyebrow&quot;&gt;PACKAGE INPUTS&lt;/div&gt;
+    &lt;h2&gt;Enter Pay Package Details&lt;/h2&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;entry-helper&quot;&gt;Enter the assignment rates and package details below. Results, margin status, and candidate package information will update automatically.&lt;/div&gt;
+&lt;div class=&quot;inputs primary-rate-inputs&quot;&gt;
+&lt;div class=&quot;field&quot;&gt;&lt;label&gt;Bill Rate ($/hr)&lt;/label&gt;&lt;input id=&quot;br&quot; type=&quot;number&quot; step=&quot;.01&quot; value=&quot;90&quot;&gt;&lt;/div&gt;
 
-<div class="field"><label>Weekly Stipend ($)</label><input id="stipend" type="number" step=".01" value="1240"></div>
-<div class="field"><label>Hours per Week</label><input id="hours" type="number" step=".01" value="36"></div>
-<div class="field"><label>Contract Tenure (Weeks)</label><input id="tenure" type="number" step="1" min="1" value="13"><small>Default assignment tenure is 13 weeks</small></div>
-<div class="field"><label>Desired Minimum Net Margin ($/hr)</label><input id="desiredMargin" type="number" step=".01" min="0" value="5"><small>Used to calculate the maximum taxable Pay Rate you can offer</small></div>
-<div class="field"><label>OT Scenario</label>
-<select id="otMode" onchange="syncOTMode()" style="width:100%;padding:11px;border:1px solid var(--border);border-radius:8px;background:var(--input);color:var(--text);font-size:15px">
-<option value="none">No OT Expected</option>
-<option value="paid">OT Expected — Client Pays OT Premium</option>
-<option value="unpaid">OT Expected — Client Does Not Pay OT Premium</option>
-</select></div>
-<div class="field" id="otHoursWrap" style="display:none"><label>Candidate OT Hours / Week</label><input id="otHours" type="number" step=".01" min="0" value="" placeholder="Enter OT hours"><small>Example: 12 hours/week</small></div>
+&lt;div class=&quot;field&quot;&gt;&lt;label&gt;Pay Rate ($/hr)&lt;/label&gt;&lt;input id=&quot;pr&quot; type=&quot;number&quot; step=&quot;.01&quot; value=&quot;37&quot;&gt;&lt;/div&gt;
 
-<input id="clientPaysOT" type="checkbox" style="display:none">
-</div>
-</section>
-<input id="candidateName" type="hidden" value="">
-<input id="clientName" type="hidden" value="">
+&lt;div class=&quot;field&quot;&gt;&lt;label&gt;Weekly Stipend ($)&lt;/label&gt;&lt;input id=&quot;stipend&quot; type=&quot;number&quot; step=&quot;.01&quot; value=&quot;1240&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;field&quot;&gt;&lt;label&gt;Hours per Week&lt;/label&gt;&lt;input id=&quot;hours&quot; type=&quot;number&quot; step=&quot;.01&quot; value=&quot;36&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;field&quot;&gt;&lt;label&gt;Contract Tenure (Weeks)&lt;/label&gt;&lt;input id=&quot;tenure&quot; type=&quot;number&quot; step=&quot;1&quot; min=&quot;1&quot; value=&quot;13&quot;&gt;&lt;small&gt;Default assignment tenure is 13 weeks&lt;/small&gt;&lt;/div&gt;
+&lt;div class=&quot;field&quot;&gt;&lt;label&gt;Desired Minimum Net Margin ($/hr)&lt;/label&gt;&lt;input id=&quot;desiredMargin&quot; type=&quot;number&quot; step=&quot;.01&quot; min=&quot;0&quot; value=&quot;5&quot;&gt;&lt;small&gt;Used to calculate the maximum taxable Pay Rate you can offer&lt;/small&gt;&lt;/div&gt;
+&lt;div class=&quot;field&quot;&gt;&lt;label&gt;OT Scenario&lt;/label&gt;
+&lt;select id=&quot;otMode&quot; onchange=&quot;syncOTMode()&quot; style=&quot;width:100%;padding:11px;border:1px solid var(--border);border-radius:8px;background:var(--input);color:var(--text);font-size:15px&quot;&gt;
+&lt;option value=&quot;none&quot;&gt;No OT Expected&lt;/option&gt;
+&lt;option value=&quot;paid&quot;&gt;OT Expected — Client Pays OT Premium&lt;/option&gt;
+&lt;option value=&quot;unpaid&quot;&gt;OT Expected — Client Does Not Pay OT Premium&lt;/option&gt;
+&lt;/select&gt;&lt;/div&gt;
+&lt;div class=&quot;field&quot; id=&quot;otHoursWrap&quot; style=&quot;display:none&quot;&gt;&lt;label&gt;Candidate OT Hours / Week&lt;/label&gt;&lt;input id=&quot;otHours&quot; type=&quot;number&quot; step=&quot;.01&quot; min=&quot;0&quot; value=&quot;&quot; placeholder=&quot;Enter OT hours&quot;&gt;&lt;small&gt;Example: 12 hours/week&lt;/small&gt;&lt;/div&gt;
 
-<input id="msp" type="hidden" value="6.25">
-<input id="tax" type="hidden" value="15">
-<input id="ops" type="hidden" value="2">
-<input id="otMult" type="hidden" value="1.5">
+&lt;input id=&quot;clientPaysOT&quot; type=&quot;checkbox&quot; style=&quot;display:none&quot;&gt;
+&lt;/div&gt;
+&lt;/section&gt;
+&lt;input id=&quot;candidateName&quot; type=&quot;hidden&quot; value=&quot;&quot;&gt;
+&lt;input id=&quot;clientName&quot; type=&quot;hidden&quot; value=&quot;&quot;&gt;
 
-<div class="fixed-panel">
-  <div class="fixed-title">🔒 Fixed Program Settings</div>
-  <div class="fixed-grid">
-    <div class="fixed-item"><span>MSP Fee</span><strong>6.25%</strong></div>
-    <div class="fixed-item"><span>W2 Payroll Load</span><strong>15%</strong></div>
-    <div class="fixed-item"><span>Operational Cost</span><strong>$2.00/hr</strong></div>
-  </div>
-</div>
+&lt;input id=&quot;msp&quot; type=&quot;hidden&quot; value=&quot;6.25&quot;&gt;
+&lt;input id=&quot;tax&quot; type=&quot;hidden&quot; value=&quot;15&quot;&gt;
+&lt;input id=&quot;ops&quot; type=&quot;hidden&quot; value=&quot;2&quot;&gt;
+&lt;input id=&quot;otMult&quot; type=&quot;hidden&quot; value=&quot;1.5&quot;&gt;
 
-<div id="validationBox" class="validation-box"></div>
+&lt;div class=&quot;fixed-panel&quot;&gt;
+  &lt;div class=&quot;fixed-title&quot;&gt;🔒 Fixed Program Settings&lt;/div&gt;
+  &lt;div class=&quot;fixed-grid&quot;&gt;
+    &lt;div class=&quot;fixed-item&quot;&gt;&lt;span&gt;MSP Fee&lt;/span&gt;&lt;strong&gt;6.25%&lt;/strong&gt;&lt;/div&gt;
+    &lt;div class=&quot;fixed-item&quot;&gt;&lt;span&gt;W2 Payroll Load&lt;/span&gt;&lt;strong&gt;15%&lt;/strong&gt;&lt;/div&gt;
+    &lt;div class=&quot;fixed-item&quot;&gt;&lt;span&gt;Operational Cost&lt;/span&gt;&lt;strong&gt;$2.00/hr&lt;/strong&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
 
-<div class="auto-update-note">⚡ Results update automatically as you change the package details.</div>
-<div class="top-action-bar">
-  <button class="reset-btn" onclick="resetCalculator()">↻ Reset Calculator</button>
-  <button class="pdf-btn" onclick="openPrintDialog()">🖨 Print / Save as PDF</button>
-</div><div id="marginWarning" class="warning-box" style="display:none!important"></div>
-<div id="otWarning" class="warning-box danger-warning" style="display:none"></div>
+&lt;div id=&quot;validationBox&quot; class=&quot;validation-box&quot;&gt;&lt;/div&gt;
 
-<div class="print-report-header">
-<img src="https://cdn.prod.website-files.com/6540650aa6e7078f6b1d4dec/65435574bb3a988c6321cce0_SH%20Logo1a.webp" alt="Siri Health">
-<div><h1>Medefis Pay Package &amp; Margin Calculator</h1><p>Siri HealthCare Services Inc. · Package Review &amp; Approval Record · <span id="printGeneratedDate"></span></p></div>
-</div>
-<div id="printIdentityBanner" class="print-identity-banner">
-<div><span>Candidate</span><strong id="printCandidateDisplay"></strong></div>
-<div><span>Facility / Client</span><strong id="printClientDisplay"></strong></div>
-</div>
-<div id="dealDecision" class="decision-card">Enter package details and calculate</div>
-<div class="quality-grid">
-<div class="quality-item"><span>Margin Status</span><strong id="qualityMargin">—</strong></div>
-<div class="quality-item"><span>GSA Check</span><strong id="qualityGsa">Not Checked</strong></div>
-<div class="quality-item"><span>OT Risk</span><strong id="qualityOt">No OT</strong></div>
-<div class="quality-item"><span>Manager Approval</span><strong id="qualityApproval">—</strong></div>
-</div>
+&lt;div class=&quot;auto-update-note&quot;&gt;⚡ Results update automatically as you change the package details.&lt;/div&gt;
+&lt;div class=&quot;top-action-bar&quot;&gt;
+  &lt;button class=&quot;reset-btn&quot; onclick=&quot;resetCalculator()&quot;&gt;↻ Reset Calculator&lt;/button&gt;
+  &lt;button class=&quot;pdf-btn&quot; onclick=&quot;openPrintDialog()&quot;&gt;🖨 Print / Save as PDF&lt;/button&gt;
+&lt;/div&gt;&lt;div id=&quot;marginWarning&quot; class=&quot;warning-box&quot; style=&quot;display:none!important&quot;&gt;&lt;/div&gt;
+&lt;div id=&quot;otWarning&quot; class=&quot;warning-box danger-warning&quot; style=&quot;display:none&quot;&gt;&lt;/div&gt;
 
-
-<section class="margin-zone">
-<div class="section-head">
-  <div><div class="eyebrow">DECISION SNAPSHOT</div><h2>Margin &amp; Approval Status <span class="internal-badge">INTERNAL ONLY</span></h2></div>
-  <div id="lastCalculated" class="timestamp">Not calculated yet</div>
-</div>
-<div class="margin-grid">
-  <div class="margin-card net-card"><span>NET MARGIN / HOUR</span><strong id="netMargin">$0.00</strong><small>After $2 operational cost</small></div>
-  <div class="margin-card"><span>GROSS MARGIN / HOUR</span><strong id="marginHr">$0.00</strong><small>Before operational cost</small></div>
-  <div class="margin-card"><span>NET MARGIN %</span><strong id="netMarginPct">0.00%</strong><small>After operational cost</small></div>
-  <div class="margin-card"><span>WEEKLY NET MARGIN</span><strong id="weekly">$0.00</strong><small>Includes OT impact, if entered</small></div>
-  <div class="margin-card"><span id="contractMarginLabel">13-Week Contract Margin</span><strong id="annual">$0.00</strong><small>Based on selected tenure</small></div>
-</div>
-</section>
-
-<section class="recruiter-focus">
-<div class="section-head">
-  <div><div class="eyebrow">CANDIDATE CONVERSATION</div><h2>Recruiter Package View</h2></div>
-</div>
-<div class="recruiter-lead">Use these numbers while discussing the opportunity with the candidate.</div>
-<div class="package-grid">
-  <div class="package-card pay-card"><span>Taxable Hourly Pay</span><strong id="talkPay">$0.00/hr</strong></div>
-  <div class="package-card stipend-card"><span>Weekly Stipend</span><strong id="talkStipend">$0.00/week</strong></div>
-  <div class="package-card weekly-card"><span>Gross Weekly Package</span><strong id="talkWeekly">$0.00/week</strong></div>
-  <div class="package-card"><span>Regular Hours</span><strong id="talkHours">0 hours</strong></div>
-  <div class="package-card"><span>Assignment Tenure</span><strong id="talkTenure">13 weeks</strong></div>
-  <div class="package-card"><span>Est. Contract Earnings</span><strong id="talkContract">$0.00</strong></div>
-  <div class="package-card"><span>OT Scenario</span><strong id="talkOT">No OT Expected</strong></div>
-</div>
-<div class="candidate-tip"><b>Recruiter Tip:</b> Always explain taxable hourly pay and weekly stipend separately. Do not describe the entire weekly package as non-taxable. Stipend treatment is subject to candidate eligibility and company compliance review.</div>
-</section>
-
-<section class="pitch-section">
-<div class="section-head"><div><div class="eyebrow">READY TO USE</div><h2>📣 Candidate Pay Package Message</h2></div></div>
-<div class="pitch-box pitch-modern">
-  <div id="candidatePitch" class="pitch-text"></div>
-  <button class="copy-btn" onclick="copyPitch()">Copy Candidate Message</button>
-  <div id="copyStatus" class="copy-status"></div>
-</div>
-</section>
+&lt;div class=&quot;print-report-header&quot;&gt;
+&lt;img src=&quot;https://cdn.prod.website-files.com/6540650aa6e7078f6b1d4dec/65435574bb3a988c6321cce0_SH%20Logo1a.webp&quot; alt=&quot;Siri Health&quot;&gt;
+&lt;div&gt;&lt;h1&gt;Medefis Pay Package &amp;amp; Margin Calculator&lt;/h1&gt;&lt;p&gt;Siri HealthCare Services Inc. · Package Review &amp;amp; Approval Record · &lt;span id=&quot;printGeneratedDate&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&quot;printIdentityBanner&quot; class=&quot;print-identity-banner&quot;&gt;
+&lt;div&gt;&lt;span&gt;Candidate&lt;/span&gt;&lt;strong id=&quot;printCandidateDisplay&quot;&gt;&lt;/strong&gt;&lt;/div&gt;
+&lt;div&gt;&lt;span&gt;Facility / Client&lt;/span&gt;&lt;strong id=&quot;printClientDisplay&quot;&gt;&lt;/strong&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&quot;dealDecision&quot; class=&quot;decision-card&quot;&gt;Enter package details and calculate&lt;/div&gt;
+&lt;div class=&quot;quality-grid&quot;&gt;
+&lt;div class=&quot;quality-item&quot;&gt;&lt;span&gt;Margin Status&lt;/span&gt;&lt;strong id=&quot;qualityMargin&quot;&gt;—&lt;/strong&gt;&lt;/div&gt;
+&lt;div class=&quot;quality-item&quot;&gt;&lt;span&gt;GSA Check&lt;/span&gt;&lt;strong id=&quot;qualityGsa&quot;&gt;Not Checked&lt;/strong&gt;&lt;/div&gt;
+&lt;div class=&quot;quality-item&quot;&gt;&lt;span&gt;OT Risk&lt;/span&gt;&lt;strong id=&quot;qualityOt&quot;&gt;No OT&lt;/strong&gt;&lt;/div&gt;
+&lt;div class=&quot;quality-item&quot;&gt;&lt;span&gt;Manager Approval&lt;/span&gt;&lt;strong id=&quot;qualityApproval&quot;&gt;—&lt;/strong&gt;&lt;/div&gt;
+&lt;/div&gt;
 
 
+&lt;section class=&quot;margin-zone&quot;&gt;
+&lt;div class=&quot;section-head&quot;&gt;
+  &lt;div&gt;&lt;div class=&quot;eyebrow&quot;&gt;DECISION SNAPSHOT&lt;/div&gt;&lt;h2&gt;Margin &amp;amp; Approval Status &lt;span class=&quot;internal-badge&quot;&gt;INTERNAL ONLY&lt;/span&gt;&lt;/h2&gt;&lt;/div&gt;
+  &lt;div id=&quot;lastCalculated&quot; class=&quot;timestamp&quot;&gt;Not calculated yet&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;margin-grid&quot;&gt;
+  &lt;div class=&quot;margin-card net-card&quot;&gt;&lt;span&gt;NET MARGIN / HOUR&lt;/span&gt;&lt;strong id=&quot;netMargin&quot;&gt;$0.00&lt;/strong&gt;&lt;small&gt;After $2 operational cost&lt;/small&gt;&lt;/div&gt;
+  &lt;div class=&quot;margin-card&quot;&gt;&lt;span&gt;GROSS MARGIN / HOUR&lt;/span&gt;&lt;strong id=&quot;marginHr&quot;&gt;$0.00&lt;/strong&gt;&lt;small&gt;Before operational cost&lt;/small&gt;&lt;/div&gt;
+  &lt;div class=&quot;margin-card&quot;&gt;&lt;span&gt;NET MARGIN %&lt;/span&gt;&lt;strong id=&quot;netMarginPct&quot;&gt;0.00%&lt;/strong&gt;&lt;small&gt;After operational cost&lt;/small&gt;&lt;/div&gt;
+  &lt;div class=&quot;margin-card&quot;&gt;&lt;span&gt;WEEKLY NET MARGIN&lt;/span&gt;&lt;strong id=&quot;weekly&quot;&gt;$0.00&lt;/strong&gt;&lt;small&gt;Includes OT impact, if entered&lt;/small&gt;&lt;/div&gt;
+  &lt;div class=&quot;margin-card&quot;&gt;&lt;span id=&quot;contractMarginLabel&quot;&gt;13-Week Contract Margin&lt;/span&gt;&lt;strong id=&quot;annual&quot;&gt;$0.00&lt;/strong&gt;&lt;small&gt;Based on selected tenure&lt;/small&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/section&gt;
 
-<details class="guide-box">
-<summary>📘 GSA Per Diem Guide & Stipend Check</summary>
-<div class="guide-content">
-<div class="gsa-note"><b>Simple explanation:</b> GSA publishes location-based reference rates for <b>Lodging</b> and <b>Meals & Incidental Expenses (M&IE)</b>. Enter the rates shown for the assignment location. This section is a reference check only and does not decide whether a candidate qualifies for tax-free treatment. Recruiters should not promise tax-free eligibility based only on this comparison.</div>
+&lt;section class=&quot;recruiter-focus&quot;&gt;
+&lt;div class=&quot;section-head&quot;&gt;
+  &lt;div&gt;&lt;div class=&quot;eyebrow&quot;&gt;CANDIDATE CONVERSATION&lt;/div&gt;&lt;h2&gt;Recruiter Package View&lt;/h2&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;recruiter-lead&quot;&gt;Use these numbers while discussing the opportunity with the candidate.&lt;/div&gt;
+&lt;div class=&quot;package-grid&quot;&gt;
+  &lt;div class=&quot;package-card pay-card&quot;&gt;&lt;span&gt;Taxable Hourly Pay&lt;/span&gt;&lt;strong id=&quot;talkPay&quot;&gt;$0.00/hr&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;package-card stipend-card&quot;&gt;&lt;span&gt;Weekly Stipend&lt;/span&gt;&lt;strong id=&quot;talkStipend&quot;&gt;$0.00/week&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;package-card weekly-card&quot;&gt;&lt;span&gt;Gross Weekly Package&lt;/span&gt;&lt;strong id=&quot;talkWeekly&quot;&gt;$0.00/week&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;package-card&quot;&gt;&lt;span&gt;Regular Hours&lt;/span&gt;&lt;strong id=&quot;talkHours&quot;&gt;0 hours&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;package-card&quot;&gt;&lt;span&gt;Assignment Tenure&lt;/span&gt;&lt;strong id=&quot;talkTenure&quot;&gt;13 weeks&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;package-card&quot;&gt;&lt;span&gt;Est. Contract Earnings&lt;/span&gt;&lt;strong id=&quot;talkContract&quot;&gt;$0.00&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class=&quot;package-card&quot;&gt;&lt;span&gt;OT Scenario&lt;/span&gt;&lt;strong id=&quot;talkOT&quot;&gt;No OT Expected&lt;/strong&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;candidate-tip&quot;&gt;&lt;b&gt;Recruiter Tip:&lt;/b&gt; Always explain taxable hourly pay and weekly stipend separately. Do not describe the entire weekly package as non-taxable. Stipend treatment is subject to candidate eligibility and company compliance review.&lt;/div&gt;
+&lt;/section&gt;
 
-<div class="gsa-grid">
-<div class="field"><label>GSA Lodging Rate ($/night)</label><input id="gsaLodging" type="number" step=".01" min="0" placeholder="Enter GSA lodging rate"></div>
-<div class="field"><label>GSA M&IE Rate ($/day)</label><input id="gsaMie" type="number" step=".01" min="0" placeholder="Enter GSA M&IE rate"></div>
-</div>
+&lt;section class=&quot;pitch-section&quot;&gt;
+&lt;div class=&quot;section-head&quot;&gt;&lt;div&gt;&lt;div class=&quot;eyebrow&quot;&gt;READY TO USE&lt;/div&gt;&lt;h2&gt;📣 Candidate Pay Package Message&lt;/h2&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;pitch-box pitch-modern&quot;&gt;
+  &lt;div id=&quot;candidatePitch&quot; class=&quot;pitch-text&quot;&gt;&lt;/div&gt;
+  &lt;button class=&quot;copy-btn&quot; onclick=&quot;copyPitch()&quot;&gt;Copy Candidate Message&lt;/button&gt;
+  &lt;div id=&quot;copyStatus&quot; class=&quot;copy-status&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/section&gt;
 
-<div class="gsa-results">
-<div class="metric"><span>Daily GSA Reference</span><strong id="gsaDaily">$0.00</strong></div>
-<div class="metric"><span>Weekly GSA Reference (7 days)</span><strong id="gsaWeekly">$0.00</strong></div>
-<div class="metric"><span>Current Weekly Stipend</span><strong id="gsaCurrentStipend">$0.00</strong></div>
-</div>
+&lt;section class=&quot;pitch-section healthcare-rtr-section&quot;&gt;
+&lt;div class=&quot;section-head&quot;&gt;
+  &lt;div&gt;&lt;div class=&quot;eyebrow&quot;&gt;RIGHT TO REPRESENT&lt;/div&gt;&lt;h2&gt;📄 Healthcare RTR Authorization&lt;/h2&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;rtr-intro&quot;&gt;Enter the candidate and facility/client details to generate a copy-ready RTR. The pay package is automatically taken from the calculator above.&lt;/div&gt;
+&lt;div class=&quot;rtr-fields&quot;&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;label&gt;Candidate Full Legal Name&lt;/label&gt;&lt;input id=&quot;hcRtrCandidate&quot; type=&quot;text&quot; placeholder=&quot;Enter full legal name&quot; oninput=&quot;updateHealthcareRTR()&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;label&gt;Facility / Client Name&lt;/label&gt;&lt;input id=&quot;hcRtrClient&quot; type=&quot;text&quot; placeholder=&quot;Enter facility or client name&quot; oninput=&quot;updateHealthcareRTR()&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;pitch-box pitch-modern&quot;&gt;
+  &lt;div id=&quot;hcRtrText&quot; class=&quot;pitch-text&quot;&gt;&lt;/div&gt;
+  &lt;button class=&quot;copy-btn&quot; onclick=&quot;copyHealthcareRTR()&quot;&gt;Copy Healthcare RTR&lt;/button&gt;
+  &lt;div id=&quot;hcRtrCopyStatus&quot; class=&quot;copy-status&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/section&gt;
 
-<div id="gsaStatus" class="gsa-status" style="display:none"></div>
+&lt;details class=&quot;guide-box&quot;&gt;
+&lt;summary&gt;📘 GSA Per Diem Guide &amp; Stipend Check&lt;/summary&gt;
+&lt;div class=&quot;guide-content&quot;&gt;
+&lt;div class=&quot;gsa-note&quot;&gt;&lt;b&gt;Simple explanation:&lt;/b&gt; GSA publishes location-based reference rates for &lt;b&gt;Lodging&lt;/b&gt; and &lt;b&gt;Meals &amp; Incidental Expenses (M&amp;IE)&lt;/b&gt;. Enter the rates shown for the assignment location. This section is a reference check only and does not decide whether a candidate qualifies for tax-free treatment. Recruiters should not promise tax-free eligibility based only on this comparison.&lt;/div&gt;
 
-<div class="gsa-note" style="margin-top:14px">
-<b>Recruiter rules:</b><br>
-1. Check the official GSA rate for the assignment location and applicable period.<br>
-2. Keep taxable hourly pay and weekly stipend separate when speaking with the candidate.<br>
-3. Do not tell a candidate that the full weekly package is tax-free.<br>
-4. GSA lodging and M&IE are separate categories; this simple comparison is only a reference benchmark, not a tax-eligibility determination.<br>
+&lt;div class=&quot;gsa-grid&quot;&gt;
+&lt;div class=&quot;field&quot;&gt;&lt;label&gt;GSA Lodging Rate ($/night)&lt;/label&gt;&lt;input id=&quot;gsaLodging&quot; type=&quot;number&quot; step=&quot;.01&quot; min=&quot;0&quot; placeholder=&quot;Enter GSA lodging rate&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;field&quot;&gt;&lt;label&gt;GSA M&amp;IE Rate ($/day)&lt;/label&gt;&lt;input id=&quot;gsaMie&quot; type=&quot;number&quot; step=&quot;.01&quot; min=&quot;0&quot; placeholder=&quot;Enter GSA M&amp;IE rate&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;gsa-results&quot;&gt;
+&lt;div class=&quot;metric&quot;&gt;&lt;span&gt;Daily GSA Reference&lt;/span&gt;&lt;strong id=&quot;gsaDaily&quot;&gt;$0.00&lt;/strong&gt;&lt;/div&gt;
+&lt;div class=&quot;metric&quot;&gt;&lt;span&gt;Weekly GSA Reference (7 days)&lt;/span&gt;&lt;strong id=&quot;gsaWeekly&quot;&gt;$0.00&lt;/strong&gt;&lt;/div&gt;
+&lt;div class=&quot;metric&quot;&gt;&lt;span&gt;Current Weekly Stipend&lt;/span&gt;&lt;strong id=&quot;gsaCurrentStipend&quot;&gt;$0.00&lt;/strong&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id=&quot;gsaStatus&quot; class=&quot;gsa-status&quot; style=&quot;display:none&quot;&gt;&lt;/div&gt;
+
+&lt;div class=&quot;gsa-note&quot; style=&quot;margin-top:14px&quot;&gt;
+&lt;b&gt;Recruiter rules:&lt;/b&gt;&lt;br&gt;
+1. Check the official GSA rate for the assignment location and applicable period.&lt;br&gt;
+2. Keep taxable hourly pay and weekly stipend separate when speaking with the candidate.&lt;br&gt;
+3. Do not tell a candidate that the full weekly package is tax-free.&lt;br&gt;
+4. GSA lodging and M&amp;IE are separate categories; this simple comparison is only a reference benchmark, not a tax-eligibility determination.&lt;br&gt;
 5. Candidate tax-home and assignment eligibility must be reviewed under company compliance procedures.
-</div>
+&lt;/div&gt;
 
-<a class="gsa-link" href="https://www.gsa.gov/travel/plan-a-trip/per-diem-rates" target="_blank" rel="noopener noreferrer">Open Official GSA Per Diem Lookup</a>
-</div>
-</details>
-<details class="guide-box internal-details">
-<summary>📊 Internal Financial Details <span class="internal-badge">INTERNAL ONLY</span> <span>For manager/internal review</span></summary>
-<div class="guide-content">
-<div class="results internal-grid">
-<div class="metric"><span>MSP Fee / Hr</span><strong id="mspFee"></strong></div>
-<div class="metric"><span>Actual Bill Rate</span><strong id="actualBR"></strong></div>
-<div class="metric"><span>Tax-Loaded Pay Rate</span><strong id="taxPR"></strong></div>
-<div class="metric"><span>Stipend Cost / Hr</span><strong id="stipendHr"></strong></div>
-<div class="metric"><span>Actual Pay Rate</span><strong id="actualPR"></strong></div>
-<div class="metric"><span>Gross Weekly Pay Package</span><strong id="grossWeekly"></strong></div>
-<div class="metric max-pay-card"><span>Maximum Taxable Pay Rate</span><strong id="maxPayRate"></strong><small id="maxPayNote">To maintain desired minimum net margin</small></div>
-<div class="metric"><span>Candidate Contract Earnings</span><strong id="contractEarnings"></strong></div>
-<div class="metric"><span>Gross Margin %</span><strong id="marginPct"></strong></div>
-<div id="otResults" style="display:none;contents:none">
-<div class="metric"><span>Candidate OT Cost / Hr</span><strong id="candidateOTCost"></strong></div>
-<div class="metric"><span>Client OT Revenue / Hr</span><strong id="clientOTRevenue"></strong></div>
-<div class="metric"><span>OT Margin / Hr</span><strong id="otMarginHr"></strong></div>
-<div class="metric ot-highlight"><span id="otImpactLabel">OT Impact / Week</span><strong id="weeklyOTImpact"></strong><small id="otImpactNote">Effect of OT on weekly margin</small></div>
-</div>
-<div class="metric"><span id="contractRevenueLabel">13-Week Total Revenue</span><strong id="contractRevenue"></strong></div>
-<div class="metric"><span id="contractCostLabel">13-Week Candidate Cost</span><strong id="contractCost"></strong></div>
-</div>
-</div>
-</details>
+&lt;a class=&quot;gsa-link&quot; href=&quot;https://www.gsa.gov/travel/plan-a-trip/per-diem-rates&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Open Official GSA Per Diem Lookup&lt;/a&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;details class=&quot;guide-box internal-details&quot;&gt;
+&lt;summary&gt;📊 Internal Financial Details &lt;span class=&quot;internal-badge&quot;&gt;INTERNAL ONLY&lt;/span&gt; &lt;span&gt;For manager/internal review&lt;/span&gt;&lt;/summary&gt;
+&lt;div class=&quot;guide-content&quot;&gt;
+&lt;div class=&quot;results internal-grid&quot;&gt;
+&lt;div class=&quot;metric&quot;&gt;&lt;span&gt;MSP Fee / Hr&lt;/span&gt;&lt;strong id=&quot;mspFee&quot;&gt;&lt;/strong&gt;&lt;/div&gt;
+&lt;div class=&quot;metric&quot;&gt;&lt;span&gt;Actual Bill Rate&lt;/span&gt;&lt;strong id=&quot;actualBR&quot;&gt;&lt;/strong&gt;&lt;/div&gt;
+&lt;div class=&quot;metric&quot;&gt;&lt;span&gt;Tax-Loaded Pay Rate&lt;/span&gt;&lt;strong id=&quot;taxPR&quot;&gt;&lt;/strong&gt;&lt;/div&gt;
+&lt;div class=&quot;metric&quot;&gt;&lt;span&gt;Stipend Cost / Hr&lt;/span&gt;&lt;strong id=&quot;stipendHr&quot;&gt;&lt;/strong&gt;&lt;/div&gt;
+&lt;div class=&quot;metric&quot;&gt;&lt;span&gt;Actual Pay Rate&lt;/span&gt;&lt;strong id=&quot;actualPR&quot;&gt;&lt;/strong&gt;&lt;/div&gt;
+&lt;div class=&quot;metric&quot;&gt;&lt;span&gt;Gross Weekly Pay Package&lt;/span&gt;&lt;strong id=&quot;grossWeekly&quot;&gt;&lt;/strong&gt;&lt;/div&gt;
+&lt;div class=&quot;metric max-pay-card&quot;&gt;&lt;span&gt;Maximum Taxable Pay Rate&lt;/span&gt;&lt;strong id=&quot;maxPayRate&quot;&gt;&lt;/strong&gt;&lt;small id=&quot;maxPayNote&quot;&gt;To maintain desired minimum net margin&lt;/small&gt;&lt;/div&gt;
+&lt;div class=&quot;metric&quot;&gt;&lt;span&gt;Candidate Contract Earnings&lt;/span&gt;&lt;strong id=&quot;contractEarnings&quot;&gt;&lt;/strong&gt;&lt;/div&gt;
+&lt;div class=&quot;metric&quot;&gt;&lt;span&gt;Gross Margin %&lt;/span&gt;&lt;strong id=&quot;marginPct&quot;&gt;&lt;/strong&gt;&lt;/div&gt;
+&lt;div id=&quot;otResults&quot; style=&quot;display:none;contents:none&quot;&gt;
+&lt;div class=&quot;metric&quot;&gt;&lt;span&gt;Candidate OT Cost / Hr&lt;/span&gt;&lt;strong id=&quot;candidateOTCost&quot;&gt;&lt;/strong&gt;&lt;/div&gt;
+&lt;div class=&quot;metric&quot;&gt;&lt;span&gt;Client OT Revenue / Hr&lt;/span&gt;&lt;strong id=&quot;clientOTRevenue&quot;&gt;&lt;/strong&gt;&lt;/div&gt;
+&lt;div class=&quot;metric&quot;&gt;&lt;span&gt;OT Margin / Hr&lt;/span&gt;&lt;strong id=&quot;otMarginHr&quot;&gt;&lt;/strong&gt;&lt;/div&gt;
+&lt;div class=&quot;metric ot-highlight&quot;&gt;&lt;span id=&quot;otImpactLabel&quot;&gt;OT Impact / Week&lt;/span&gt;&lt;strong id=&quot;weeklyOTImpact&quot;&gt;&lt;/strong&gt;&lt;small id=&quot;otImpactNote&quot;&gt;Effect of OT on weekly margin&lt;/small&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;metric&quot;&gt;&lt;span id=&quot;contractRevenueLabel&quot;&gt;13-Week Total Revenue&lt;/span&gt;&lt;strong id=&quot;contractRevenue&quot;&gt;&lt;/strong&gt;&lt;/div&gt;
+&lt;div class=&quot;metric&quot;&gt;&lt;span id=&quot;contractCostLabel&quot;&gt;13-Week Candidate Cost&lt;/span&gt;&lt;strong id=&quot;contractCost&quot;&gt;&lt;/strong&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/details&gt;
 
-<div id="gsaCopySection" style="display:none">
-<h2>Package Breakdown with GSA Comparison</h2>
-<div class="pitch-box">
-  <div id="packageGsaSummary" class="pitch-text"></div>
-  <button class="copy-btn" onclick="copyPackageGSA()">Copy GSA Comparison</button>
-  <div id="copyGsaStatus" class="copy-status"></div>
-</div>
-</div>
+&lt;div id=&quot;gsaCopySection&quot; style=&quot;display:none&quot;&gt;
+&lt;h2&gt;Package Breakdown with GSA Comparison&lt;/h2&gt;
+&lt;div class=&quot;pitch-box&quot;&gt;
+  &lt;div id=&quot;packageGsaSummary&quot; class=&quot;pitch-text&quot;&gt;&lt;/div&gt;
+  &lt;button class=&quot;copy-btn&quot; onclick=&quot;copyPackageGSA()&quot;&gt;Copy GSA Comparison&lt;/button&gt;
+  &lt;div id=&quot;copyGsaStatus&quot; class=&quot;copy-status&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
 
-<details class="guide-box"><summary>🧮 Easy Calculation Story</summary><div class="guide-content"><div class="box" id="details"></div></div></details><div class="foot">Developed by <strong>Mr. Soni</strong> &nbsp;|&nbsp; Siri HealthCare Services Inc.</div></div></div>
-<div id="printDialog" class="print-modal" aria-hidden="true">
-<div class="print-modal-card">
-  <button class="modal-close" onclick="closePrintDialog()" aria-label="Close">×</button>
-  <div class="eyebrow">PDF IDENTIFICATION</div>
-  <h2>Prepare Package PDF</h2>
-  <p class="modal-intro">Enter the candidate and facility details for the PDF record. These fields are required only when printing or saving the package as a PDF and do not affect any calculation.</p>
-  <div id="printValidation" class="validation-box"></div>
-  <div class="identity-grid">
-    <div class="field"><label>Candidate Name <span class="required-tag">Required</span></label><input id="printCandidateName" type="text" placeholder="Enter candidate name"></div>
-    <div class="field"><label>Facility / Client Name <span class="required-tag">Required</span></label><input id="printClientName" type="text" placeholder="Enter facility or client name"></div>
-  </div>
-  <div class="print-modal-actions">
-    <button class="secondary-btn" onclick="closePrintDialog()">Cancel</button>
-    <button class="pdf-btn" onclick="prepareAndPrint()">Print / Save as PDF</button>
-  </div>
-</div>
-</div>
+&lt;details class=&quot;guide-box&quot;&gt;&lt;summary&gt;🧮 Easy Calculation Story&lt;/summary&gt;&lt;div class=&quot;guide-content&quot;&gt;&lt;div class=&quot;box&quot; id=&quot;details&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/details&gt;&lt;div class=&quot;foot&quot;&gt;Developed by &lt;strong&gt;Mr. Soni&lt;/strong&gt; &amp;nbsp;|&amp;nbsp; Siri HealthCare Services Inc.&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div id=&quot;printDialog&quot; class=&quot;print-modal&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;div class=&quot;print-modal-card&quot;&gt;
+  &lt;button class=&quot;modal-close&quot; onclick=&quot;closePrintDialog()&quot; aria-label=&quot;Close&quot;&gt;×&lt;/button&gt;
+  &lt;div class=&quot;eyebrow&quot;&gt;PDF IDENTIFICATION&lt;/div&gt;
+  &lt;h2&gt;Prepare Package PDF&lt;/h2&gt;
+  &lt;p class=&quot;modal-intro&quot;&gt;Enter the candidate and facility details for the PDF record. These fields are required only when printing or saving the package as a PDF and do not affect any calculation.&lt;/p&gt;
+  &lt;div id=&quot;printValidation&quot; class=&quot;validation-box&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;identity-grid&quot;&gt;
+    &lt;div class=&quot;field&quot;&gt;&lt;label&gt;Candidate Name &lt;span class=&quot;required-tag&quot;&gt;Required&lt;/span&gt;&lt;/label&gt;&lt;input id=&quot;printCandidateName&quot; type=&quot;text&quot; placeholder=&quot;Enter candidate name&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;field&quot;&gt;&lt;label&gt;Facility / Client Name &lt;span class=&quot;required-tag&quot;&gt;Required&lt;/span&gt;&lt;/label&gt;&lt;input id=&quot;printClientName&quot; type=&quot;text&quot; placeholder=&quot;Enter facility or client name&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;print-modal-actions&quot;&gt;
+    &lt;button class=&quot;secondary-btn&quot; onclick=&quot;closePrintDialog()&quot;&gt;Cancel&lt;/button&gt;
+    &lt;button class=&quot;pdf-btn&quot; onclick=&quot;prepareAndPrint()&quot;&gt;Print / Save as PDF&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
 
-<script>
-const $=id=>document.getElementById(id), num=id=>parseFloat($(id).value)||0, money=x=>'$'+x.toFixed(2);
+&lt;script&gt;
+const $=id=&gt;document.getElementById(id), num=id=&gt;parseFloat($(id).value)||0, money=x=&gt;&#x27;$&#x27;+x.toFixed(2);
 function openPrintDialog(){
-  let pc=$('printCandidateName'), pl=$('printClientName');
-  if(pc && !$('candidateName').value) pc.value='';
-  if(pl && !$('clientName').value) pl.value='';
-  $('printValidation').style.display='none';
-  $('printDialog').classList.add('show');
-  $('printDialog').setAttribute('aria-hidden','false');
-  setTimeout(()=>pc.focus(),50);
+  let pc=$(&#x27;printCandidateName&#x27;), pl=$(&#x27;printClientName&#x27;);
+  if(pc &amp;&amp; !$(&#x27;candidateName&#x27;).value) pc.value=&#x27;&#x27;;
+  if(pl &amp;&amp; !$(&#x27;clientName&#x27;).value) pl.value=&#x27;&#x27;;
+  $(&#x27;printValidation&#x27;).style.display=&#x27;none&#x27;;
+  $(&#x27;printDialog&#x27;).classList.add(&#x27;show&#x27;);
+  $(&#x27;printDialog&#x27;).setAttribute(&#x27;aria-hidden&#x27;,&#x27;false&#x27;);
+  setTimeout(()=&gt;pc.focus(),50);
 }
 function closePrintDialog(){
-  $('printDialog').classList.remove('show');
-  $('printDialog').setAttribute('aria-hidden','true');
+  $(&#x27;printDialog&#x27;).classList.remove(&#x27;show&#x27;);
+  $(&#x27;printDialog&#x27;).setAttribute(&#x27;aria-hidden&#x27;,&#x27;true&#x27;);
 }
 function prepareAndPrint(){
-  let candidate=$('printCandidateName').value.trim();
-  let client=$('printClientName').value.trim();
-  let pv=$('printValidation');
+  let candidate=$(&#x27;printCandidateName&#x27;).value.trim();
+  let client=$(&#x27;printClientName&#x27;).value.trim();
+  let pv=$(&#x27;printValidation&#x27;);
   let errors=[];
-  if(!candidate) errors.push('Candidate Name is required for the PDF.');
-  if(!client) errors.push('Facility / Client Name is required for the PDF.');
+  if(!candidate) errors.push(&#x27;Candidate Name is required for the PDF.&#x27;);
+  if(!client) errors.push(&#x27;Facility / Client Name is required for the PDF.&#x27;);
   if(errors.length){
-    pv.style.display='block';
-    pv.innerHTML='⛔ '+errors.join('<br>⛔ ');
+    pv.style.display=&#x27;block&#x27;;
+    pv.innerHTML=&#x27;⛔ &#x27;+errors.join(&#x27;&lt;br&gt;⛔ &#x27;);
     return;
   }
-  pv.style.display='none';
-  $('candidateName').value=candidate;
-  $('clientName').value=client;
-  $('printCandidateDisplay').textContent=candidate;
-  $('printClientDisplay').textContent=client;
-  if($('printGeneratedDate')) $('printGeneratedDate').textContent='Generated '+new Date().toLocaleString();
+  pv.style.display=&#x27;none&#x27;;
+  $(&#x27;candidateName&#x27;).value=candidate;
+  $(&#x27;clientName&#x27;).value=client;
+  $(&#x27;printCandidateDisplay&#x27;).textContent=candidate;
+  $(&#x27;printClientDisplay&#x27;).textContent=client;
+  if($(&#x27;printGeneratedDate&#x27;)) $(&#x27;printGeneratedDate&#x27;).textContent=&#x27;Generated &#x27;+new Date().toLocaleString();
   calculate();
 
   // Open every minimized section so all content is included in print/PDF.
-  let detailsEls=[...document.querySelectorAll('details')];
-  let previousStates=detailsEls.map(d=>d.open);
-  detailsEls.forEach(d=>d.open=true);
+  let detailsEls=[...document.querySelectorAll(&#x27;details&#x27;)];
+  let previousStates=detailsEls.map(d=&gt;d.open);
+  detailsEls.forEach(d=&gt;d.open=true);
 
   closePrintDialog();
-  setTimeout(()=>{
+  setTimeout(()=&gt;{
     window.print();
-    setTimeout(()=>{
-      detailsEls.forEach((d,i)=>d.open=previousStates[i]);
+    setTimeout(()=&gt;{
+      detailsEls.forEach((d,i)=&gt;d.open=previousStates[i]);
     },300);
   },180);
 }
+
+function updateHealthcareRTR(){
+  const fullName=($(&#x27;hcRtrCandidate&#x27;).value||&#x27;[Candidate Full Legal Name]&#x27;).trim();
+  const clientName=($(&#x27;hcRtrClient&#x27;).value||&#x27;[Facility / Client Name]&#x27;).trim();
+  const pr=num(&#x27;pr&#x27;), stipend=num(&#x27;stipend&#x27;), hrs=num(&#x27;hours&#x27;), tenure=num(&#x27;tenure&#x27;)||13;
+  const grossWeekly=pr*hrs+stipend;
+  const txt=`Right to Represent (RTR)
+
+I, ${fullName}, authorize Siri InfoSolutions Inc. / Siri HealthCare Services Inc. to represent and submit my profile for the healthcare staffing opportunity with ${clientName}.
+
+The pay package discussed with me is:
+
+• Taxable Pay: ${money(pr)}/hour on W2
+• Weekly Non-Taxable Stipend: ${money(stipend)}*
+• Gross Weekly Package: ${money(grossWeekly)} based on ${hrs.toFixed(0)} regular hours/week
+• Assignment Duration: ${tenure.toFixed(0)} weeks
+
+I confirm that I have not authorized any other staffing agency or recruiter to represent or submit my profile for the same position with ${clientName}. I will not authorize another agency or recruiter to submit my profile for this same position after providing this authorization.
+
+I confirm that the information provided in my resume and during the recruitment process is accurate to the best of my knowledge.
+
+Full Legal Name: ${fullName}
+Facility / Client: ${clientName}
+
+Please reply with “I Agree” to confirm this Right to Represent authorization.
+
+*Non-taxable stipend is available to eligible travelers based on applicable tax-home and assignment requirements.`;
+  $(&#x27;hcRtrText&#x27;).textContent=txt;
+}
+function copyHealthcareRTR(){
+  const fullName=$(&#x27;hcRtrCandidate&#x27;).value.trim();
+  const clientName=$(&#x27;hcRtrClient&#x27;).value.trim();
+  if(!fullName||!clientName){
+    $(&#x27;hcRtrCopyStatus&#x27;).textContent=&#x27;Enter Candidate Full Legal Name and Facility / Client Name before copying.&#x27;;
+    return;
+  }
+  navigator.clipboard.writeText($(&#x27;hcRtrText&#x27;).textContent).then(()=&gt;{
+    $(&#x27;hcRtrCopyStatus&#x27;).textContent=&#x27;RTR copied!&#x27;;
+    setTimeout(()=&gt;$(&#x27;hcRtrCopyStatus&#x27;).textContent=&#x27;&#x27;,1800);
+  });
+}
+
 function syncOTMode(){
-let mode=$('otMode').value;
-let wrap=$('otHoursWrap');
-let cb=$('clientPaysOT');
-if(mode==='none'){
- wrap.style.display='none';
- $('otHours').value='';
+let mode=$(&#x27;otMode&#x27;).value;
+let wrap=$(&#x27;otHoursWrap&#x27;);
+let cb=$(&#x27;clientPaysOT&#x27;);
+if(mode===&#x27;none&#x27;){
+ wrap.style.display=&#x27;none&#x27;;
+ $(&#x27;otHours&#x27;).value=&#x27;&#x27;;
  cb.checked=false;
 }else{
- wrap.style.display='block';
- cb.checked=(mode==='paid');
+ wrap.style.display=&#x27;block&#x27;;
+ cb.checked=(mode===&#x27;paid&#x27;);
 }
 calculate();
 }
 function resetCalculator(){
-$('candidateName').value='';
-$('clientName').value='';
-if($('printCandidateName')) $('printCandidateName').value='';
-if($('printClientName')) $('printClientName').value='';
-$('br').value='';
-$('pr').value='';
-$('stipend').value='';
-$('hours').value='36';
-$('tenure').value='13';
-$('desiredMargin').value='5';
-$('otMode').value='none';
-$('otHours').value='';
-$('clientPaysOT').checked=false;
-if($('gsaLodging')) $('gsaLodging').value='';
-if($('gsaMie')) $('gsaMie').value='';
+$(&#x27;candidateName&#x27;).value=&#x27;&#x27;;
+$(&#x27;clientName&#x27;).value=&#x27;&#x27;;
+if($(&#x27;printCandidateName&#x27;)) $(&#x27;printCandidateName&#x27;).value=&#x27;&#x27;;
+if($(&#x27;printClientName&#x27;)) $(&#x27;printClientName&#x27;).value=&#x27;&#x27;;
+$(&#x27;br&#x27;).value=&#x27;&#x27;;
+$(&#x27;pr&#x27;).value=&#x27;&#x27;;
+$(&#x27;stipend&#x27;).value=&#x27;&#x27;;
+$(&#x27;hours&#x27;).value=&#x27;36&#x27;;
+$(&#x27;tenure&#x27;).value=&#x27;13&#x27;;
+$(&#x27;desiredMargin&#x27;).value=&#x27;5&#x27;;
+$(&#x27;otMode&#x27;).value=&#x27;none&#x27;;
+$(&#x27;otHours&#x27;).value=&#x27;&#x27;;
+$(&#x27;clientPaysOT&#x27;).checked=false;
+if($(&#x27;gsaLodging&#x27;)) $(&#x27;gsaLodging&#x27;).value=&#x27;&#x27;;
+if($(&#x27;gsaMie&#x27;)) $(&#x27;gsaMie&#x27;).value=&#x27;&#x27;;
 syncOTMode();
 calculate();
 }
 function calculate(){
 let validationErrors=[];
-let rawBr=parseFloat($('br').value),rawPr=parseFloat($('pr').value),rawStipend=parseFloat($('stipend').value),rawHours=parseFloat($('hours').value),rawTenure=parseFloat($('tenure').value);
-if(!Number.isFinite(rawBr) || rawBr<=0) validationErrors.push('Bill Rate must be greater than $0.');
-if(!Number.isFinite(rawPr) || rawPr<0) validationErrors.push('Pay Rate cannot be blank or negative.');
-if(!Number.isFinite(rawStipend) || rawStipend<0) validationErrors.push('Weekly Stipend cannot be blank or negative.');
-if(!Number.isFinite(rawHours) || rawHours<=0) validationErrors.push('Hours per Week must be greater than 0.');
-if(!Number.isFinite(rawTenure) || rawTenure<=0) validationErrors.push('Contract Tenure must be greater than 0 weeks.');
-let vb=$('validationBox');
+let rawBr=parseFloat($(&#x27;br&#x27;).value),rawPr=parseFloat($(&#x27;pr&#x27;).value),rawStipend=parseFloat($(&#x27;stipend&#x27;).value),rawHours=parseFloat($(&#x27;hours&#x27;).value),rawTenure=parseFloat($(&#x27;tenure&#x27;).value);
+if(!Number.isFinite(rawBr) || rawBr&lt;=0) validationErrors.push(&#x27;Bill Rate must be greater than $0.&#x27;);
+if(!Number.isFinite(rawPr) || rawPr&lt;0) validationErrors.push(&#x27;Pay Rate cannot be blank or negative.&#x27;);
+if(!Number.isFinite(rawStipend) || rawStipend&lt;0) validationErrors.push(&#x27;Weekly Stipend cannot be blank or negative.&#x27;);
+if(!Number.isFinite(rawHours) || rawHours&lt;=0) validationErrors.push(&#x27;Hours per Week must be greater than 0.&#x27;);
+if(!Number.isFinite(rawTenure) || rawTenure&lt;=0) validationErrors.push(&#x27;Contract Tenure must be greater than 0 weeks.&#x27;);
+let vb=$(&#x27;validationBox&#x27;);
 if(validationErrors.length){
- vb.style.display='block';
- vb.innerHTML='⛔ Please correct the following before using this package:<br>• '+validationErrors.join('<br>• ');
+ vb.style.display=&#x27;block&#x27;;
+ vb.innerHTML=&#x27;⛔ Please correct the following before using this package:&lt;br&gt;• &#x27;+validationErrors.join(&#x27;&lt;br&gt;• &#x27;);
  return;
 }else{
- vb.style.display='none';
- vb.innerHTML='';
+ vb.style.display=&#x27;none&#x27;;
+ vb.innerHTML=&#x27;&#x27;;
 }
-let br=num('br'),msp=num('msp'),pr=num('pr'),tax=num('tax'),s=num('stipend'),hrs=num('hours'),tenure=num('tenure')||13,desiredMargin=num('desiredMargin'),ops=num('ops'),otHours=num('otHours'),otMult=num('otMult');
-let candidateName=$('candidateName').value.trim()||'Not entered', clientName=$('clientName').value.trim()||'Not entered';
-let clientPaysOT=$('clientPaysOT').checked;
-let hasOT=otHours>0;
+let br=num(&#x27;br&#x27;),msp=num(&#x27;msp&#x27;),pr=num(&#x27;pr&#x27;),tax=num(&#x27;tax&#x27;),s=num(&#x27;stipend&#x27;),hrs=num(&#x27;hours&#x27;),tenure=num(&#x27;tenure&#x27;)||13,desiredMargin=num(&#x27;desiredMargin&#x27;),ops=num(&#x27;ops&#x27;),otHours=num(&#x27;otHours&#x27;),otMult=num(&#x27;otMult&#x27;);
+let candidateName=$(&#x27;candidateName&#x27;).value.trim()||&#x27;Not entered&#x27;, clientName=$(&#x27;clientName&#x27;).value.trim()||&#x27;Not entered&#x27;;
+let clientPaysOT=$(&#x27;clientPaysOT&#x27;).checked;
+let hasOT=otHours&gt;0;
 
-$('otResults').style.display=hasOT?'contents':'none';
-$('otImpactLabel').textContent=hasOT?otHours.toFixed(0)+'-Hour OT Impact / Week':'OT Impact / Week';
+$(&#x27;otResults&#x27;).style.display=hasOT?&#x27;contents&#x27;:&#x27;none&#x27;;
+$(&#x27;otImpactLabel&#x27;).textContent=hasOT?otHours.toFixed(0)+&#x27;-Hour OT Impact / Week&#x27;:&#x27;OT Impact / Week&#x27;;
 
 let fee=br*msp/100;
 let abr=br-fee;
@@ -558,7 +1031,7 @@ let mp=abr?m/abr*100:0;
 let grossWeekly=(pr*hrs)+s;
 let netM=m-ops;
 let netMP=abr?netM/abr*100:0;
-let approvalRange=(netM>=5 && netM<7);
+let approvalRange=(netM&gt;=5 &amp;&amp; netM&lt;7);
 
 
 /* Maximum taxable pay rate:
@@ -567,7 +1040,7 @@ Divide by (1 + payroll load %) to get maximum taxable base PR.
 */
 let maxTaxLoaded=abr-shr-ops-desiredMargin;
 let maxPayRate=maxTaxLoaded/(1+tax/100);
-if(maxPayRate<0) maxPayRate=0;
+if(maxPayRate&lt;0) maxPayRate=0;
 
 let candidateContractEarnings=grossWeekly*tenure;
 
@@ -588,83 +1061,83 @@ let regularCandidateCost=apr*hrs*tenure;
 let otCandidateCost=candidateOTCost*otHours*tenure;
 let contractCandidateCost=regularCandidateCost+otCandidateCost;
 
-$('mspFee').textContent=money(fee);
-$('actualBR').textContent=money(abr);
-$('taxPR').textContent=money(tpr);
-$('stipendHr').textContent=money(shr);
-$('actualPR').textContent=money(apr);
-$('grossWeekly').textContent=money(grossWeekly);
-$('maxPayRate').textContent=money(maxPayRate)+'/hr';
-$('maxPayNote').textContent='Maintains at least '+money(desiredMargin)+'/hr Net Margin';
-$('contractEarnings').textContent=money(candidateContractEarnings);
-$('marginHr').textContent=money(m);
-$('marginPct').textContent=mp.toFixed(2)+'%';
-$('netMargin').textContent=money(netM);
-$('netMarginPct').textContent=netMP.toFixed(2)+'%';
-$('candidateOTCost').textContent=money(candidateOTCost);
-$('clientOTRevenue').textContent=money(clientOTRevenue);
-$('otMarginHr').textContent=money(otMarginHr);
-$('weeklyOTImpact').textContent=money(weeklyOTImpact);
-$('otImpactNote').textContent=otHours.toFixed(0)+' OT hours change weekly margin by '+money(weeklyOTImpact);
-$('weekly').textContent=money(weekly);
-$('contractRevenue').textContent=money(contractRevenue);
-$('contractCost').textContent=money(contractCandidateCost);
-$('annual').textContent=money(contractMargin);
-$('contractRevenueLabel').textContent=tenure.toFixed(0)+'-Week Total Revenue';
-$('contractCostLabel').textContent=tenure.toFixed(0)+'-Week Candidate Cost';
-$('contractMarginLabel').textContent=tenure.toFixed(0)+'-Week Contract Margin';
-$('talkPay').textContent=money(pr)+'/hr';
-$('talkStipend').textContent=money(s)+'/week';
-$('talkWeekly').textContent=money(grossWeekly)+'/week';
-$('talkHours').textContent=hrs.toFixed(0)+' hours';
-$('talkTenure').textContent=tenure.toFixed(0)+' weeks';
-$('talkContract').textContent=money(candidateContractEarnings);
-$('talkOT').textContent=!hasOT?'No OT Expected':(clientPaysOT?'OT Expected — Client Pays Premium':'OT Expected — Client Does Not Pay Premium');
+$(&#x27;mspFee&#x27;).textContent=money(fee);
+$(&#x27;actualBR&#x27;).textContent=money(abr);
+$(&#x27;taxPR&#x27;).textContent=money(tpr);
+$(&#x27;stipendHr&#x27;).textContent=money(shr);
+$(&#x27;actualPR&#x27;).textContent=money(apr);
+$(&#x27;grossWeekly&#x27;).textContent=money(grossWeekly);
+$(&#x27;maxPayRate&#x27;).textContent=money(maxPayRate)+&#x27;/hr&#x27;;
+$(&#x27;maxPayNote&#x27;).textContent=&#x27;Maintains at least &#x27;+money(desiredMargin)+&#x27;/hr Net Margin&#x27;;
+$(&#x27;contractEarnings&#x27;).textContent=money(candidateContractEarnings);
+$(&#x27;marginHr&#x27;).textContent=money(m);
+$(&#x27;marginPct&#x27;).textContent=mp.toFixed(2)+&#x27;%&#x27;;
+$(&#x27;netMargin&#x27;).textContent=money(netM);
+$(&#x27;netMarginPct&#x27;).textContent=netMP.toFixed(2)+&#x27;%&#x27;;
+$(&#x27;candidateOTCost&#x27;).textContent=money(candidateOTCost);
+$(&#x27;clientOTRevenue&#x27;).textContent=money(clientOTRevenue);
+$(&#x27;otMarginHr&#x27;).textContent=money(otMarginHr);
+$(&#x27;weeklyOTImpact&#x27;).textContent=money(weeklyOTImpact);
+$(&#x27;otImpactNote&#x27;).textContent=otHours.toFixed(0)+&#x27; OT hours change weekly margin by &#x27;+money(weeklyOTImpact);
+$(&#x27;weekly&#x27;).textContent=money(weekly);
+$(&#x27;contractRevenue&#x27;).textContent=money(contractRevenue);
+$(&#x27;contractCost&#x27;).textContent=money(contractCandidateCost);
+$(&#x27;annual&#x27;).textContent=money(contractMargin);
+$(&#x27;contractRevenueLabel&#x27;).textContent=tenure.toFixed(0)+&#x27;-Week Total Revenue&#x27;;
+$(&#x27;contractCostLabel&#x27;).textContent=tenure.toFixed(0)+&#x27;-Week Candidate Cost&#x27;;
+$(&#x27;contractMarginLabel&#x27;).textContent=tenure.toFixed(0)+&#x27;-Week Contract Margin&#x27;;
+$(&#x27;talkPay&#x27;).textContent=money(pr)+&#x27;/hr&#x27;;
+$(&#x27;talkStipend&#x27;).textContent=money(s)+&#x27;/week&#x27;;
+$(&#x27;talkWeekly&#x27;).textContent=money(grossWeekly)+&#x27;/week&#x27;;
+$(&#x27;talkHours&#x27;).textContent=hrs.toFixed(0)+&#x27; hours&#x27;;
+$(&#x27;talkTenure&#x27;).textContent=tenure.toFixed(0)+&#x27; weeks&#x27;;
+$(&#x27;talkContract&#x27;).textContent=money(candidateContractEarnings);
+$(&#x27;talkOT&#x27;).textContent=!hasOT?&#x27;No OT Expected&#x27;:(clientPaysOT?&#x27;OT Expected — Client Pays Premium&#x27;:&#x27;OT Expected — Client Does Not Pay Premium&#x27;);
 let now=new Date();
-if($('lastCalculated')) $('lastCalculated').textContent='Last calculated: '+now.toLocaleString();
+if($(&#x27;lastCalculated&#x27;)) $(&#x27;lastCalculated&#x27;).textContent=&#x27;Last calculated: &#x27;+now.toLocaleString();
 
 
-['marginHr','marginPct'].forEach(x=>$(x).className=m>=0?'good':'bad');
-['netMargin','netMarginPct'].forEach(x=>$(x).className=netM>=0?'good':'bad');
-['otMarginHr','weeklyOTImpact'].forEach(x=>$(x).className=otMarginHr>=0?'good':'bad');
-['weekly','annual'].forEach(x=>$(x).className=weekly>=0?'good':'bad');
+[&#x27;marginHr&#x27;,&#x27;marginPct&#x27;].forEach(x=&gt;$(x).className=m&gt;=0?&#x27;good&#x27;:&#x27;bad&#x27;);
+[&#x27;netMargin&#x27;,&#x27;netMarginPct&#x27;].forEach(x=&gt;$(x).className=netM&gt;=0?&#x27;good&#x27;:&#x27;bad&#x27;);
+[&#x27;otMarginHr&#x27;,&#x27;weeklyOTImpact&#x27;].forEach(x=&gt;$(x).className=otMarginHr&gt;=0?&#x27;good&#x27;:&#x27;bad&#x27;);
+[&#x27;weekly&#x27;,&#x27;annual&#x27;].forEach(x=&gt;$(x).className=weekly&gt;=0?&#x27;good&#x27;:&#x27;bad&#x27;);
 
 /* Margin decision rules */
-$('marginWarning').style.display='block';
-if(netM>=7){
-  $('marginWarning').className='warning-box healthy-warning';
-  $('marginWarning').innerHTML='✅ HEALTHY MARGIN — PROCEED. Net margin is <b>'+money(netM)+'/hr ('+netMP.toFixed(2)+'%)</b>.';
-}else if(netM>=5){
-  $('marginWarning').className='warning-box';
-  $('marginWarning').innerHTML='⚠️ MANAGER APPROVAL REQUIRED BEFORE PROCEEDING. Net margin is <b>'+money(netM)+'/hr ('+netMP.toFixed(2)+'%)</b>.';
+$(&#x27;marginWarning&#x27;).style.display=&#x27;block&#x27;;
+if(netM&gt;=7){
+  $(&#x27;marginWarning&#x27;).className=&#x27;warning-box healthy-warning&#x27;;
+  $(&#x27;marginWarning&#x27;).innerHTML=&#x27;✅ HEALTHY MARGIN — PROCEED. Net margin is &lt;b&gt;&#x27;+money(netM)+&#x27;/hr (&#x27;+netMP.toFixed(2)+&#x27;%)&lt;/b&gt;.&#x27;;
+}else if(netM&gt;=5){
+  $(&#x27;marginWarning&#x27;).className=&#x27;warning-box&#x27;;
+  $(&#x27;marginWarning&#x27;).innerHTML=&#x27;⚠️ MANAGER APPROVAL REQUIRED BEFORE PROCEEDING. Net margin is &lt;b&gt;&#x27;+money(netM)+&#x27;/hr (&#x27;+netMP.toFixed(2)+&#x27;%)&lt;/b&gt;.&#x27;;
 }else{
-  $('marginWarning').className='warning-box danger-warning';
-  $('marginWarning').innerHTML='⛔ DO NOT PROCEED — MARGIN BELOW MINIMUM THRESHOLD. Net margin is <b>'+money(netM)+'/hr ('+netMP.toFixed(2)+'%)</b>. Minimum required net margin is $5.00/hr.';
+  $(&#x27;marginWarning&#x27;).className=&#x27;warning-box danger-warning&#x27;;
+  $(&#x27;marginWarning&#x27;).innerHTML=&#x27;⛔ DO NOT PROCEED — MARGIN BELOW MINIMUM THRESHOLD. Net margin is &lt;b&gt;&#x27;+money(netM)+&#x27;/hr (&#x27;+netMP.toFixed(2)+&#x27;%)&lt;/b&gt;. Minimum required net margin is $5.00/hr.&#x27;;
 }
 
 /* Deal decision + quality check */
-let decision=$('dealDecision');
-if(netM>=7){
- decision.className='decision-card decision-good';
- decision.innerHTML='✅ <b>PROCEED — Healthy Margin</b><span class="decision-metrics">Net Margin: '+money(netM)+'/hr · '+netMP.toFixed(2)+'%</span>';
- $('qualityMargin').textContent='Healthy';
- $('qualityApproval').textContent='Not Required';
-}else if(netM>=5){
- decision.className='decision-card decision-warn';
- decision.innerHTML='⚠️ <b>MANAGER APPROVAL REQUIRED</b><span class="decision-metrics">Net Margin: '+money(netM)+'/hr · '+netMP.toFixed(2)+'%</span>';
- $('qualityMargin').textContent='Approval Range';
- $('qualityApproval').textContent='Required';
+let decision=$(&#x27;dealDecision&#x27;);
+if(netM&gt;=7){
+ decision.className=&#x27;decision-card decision-good&#x27;;
+ decision.innerHTML=&#x27;✅ &lt;b&gt;PROCEED — Healthy Margin&lt;/b&gt;&lt;span class=&quot;decision-metrics&quot;&gt;Net Margin: &#x27;+money(netM)+&#x27;/hr · &#x27;+netMP.toFixed(2)+&#x27;%&lt;/span&gt;&#x27;;
+ $(&#x27;qualityMargin&#x27;).textContent=&#x27;Healthy&#x27;;
+ $(&#x27;qualityApproval&#x27;).textContent=&#x27;Not Required&#x27;;
+}else if(netM&gt;=5){
+ decision.className=&#x27;decision-card decision-warn&#x27;;
+ decision.innerHTML=&#x27;⚠️ &lt;b&gt;MANAGER APPROVAL REQUIRED&lt;/b&gt;&lt;span class=&quot;decision-metrics&quot;&gt;Net Margin: &#x27;+money(netM)+&#x27;/hr · &#x27;+netMP.toFixed(2)+&#x27;%&lt;/span&gt;&#x27;;
+ $(&#x27;qualityMargin&#x27;).textContent=&#x27;Approval Range&#x27;;
+ $(&#x27;qualityApproval&#x27;).textContent=&#x27;Required&#x27;;
 }else{
- decision.className='decision-card decision-stop';
- decision.innerHTML='⛔ <b>DO NOT PROCEED — Margin Below Minimum</b><span class="decision-metrics">Net Margin: '+money(netM)+'/hr · '+netMP.toFixed(2)+'%</span>';
- $('qualityMargin').textContent='Below Minimum';
- $('qualityApproval').textContent='Do Not Proceed';
+ decision.className=&#x27;decision-card decision-stop&#x27;;
+ decision.innerHTML=&#x27;⛔ &lt;b&gt;DO NOT PROCEED — Margin Below Minimum&lt;/b&gt;&lt;span class=&quot;decision-metrics&quot;&gt;Net Margin: &#x27;+money(netM)+&#x27;/hr · &#x27;+netMP.toFixed(2)+&#x27;%&lt;/span&gt;&#x27;;
+ $(&#x27;qualityMargin&#x27;).textContent=&#x27;Below Minimum&#x27;;
+ $(&#x27;qualityApproval&#x27;).textContent=&#x27;Do Not Proceed&#x27;;
 }
-$('qualityOt').textContent=!hasOT?'No OT':(clientPaysOT?'Client Pays OT':'OT Margin Risk');
+$(&#x27;qualityOt&#x27;).textContent=!hasOT?&#x27;No OT&#x27;:(clientPaysOT?&#x27;Client Pays OT&#x27;:&#x27;OT Margin Risk&#x27;);
 
 /* OT warning */
-$('otWarning').style.display=(hasOT && !clientPaysOT)?'block':'none';
-$('otWarning').innerHTML='⚠️ OT WARNING: '+otHours.toFixed(0)+' OT hours are entered, but “Client pays for overtime” is not checked. Under the current calculator assumption, this reduces weekly margin by <b>'+money(Math.abs(weeklyOTImpact))+'</b>.';
+$(&#x27;otWarning&#x27;).style.display=(hasOT &amp;&amp; !clientPaysOT)?&#x27;block&#x27;:&#x27;none&#x27;;
+$(&#x27;otWarning&#x27;).innerHTML=&#x27;⚠️ OT WARNING: &#x27;+otHours.toFixed(0)+&#x27; OT hours are entered, but “Client pays for overtime” is not checked. Under the current calculator assumption, this reduces weekly margin by &lt;b&gt;&#x27;+money(Math.abs(weeklyOTImpact))+&#x27;&lt;/b&gt;.&#x27;;
 
 /* Candidate pitch */
 let pitch=`Hi,
@@ -681,80 +1154,105 @@ Please let me know if this package works for you and we can discuss the next ste
 
 *Non-taxable stipend is available to eligible travelers based on applicable tax-home and assignment requirements.`;
 
-$('candidatePitch').textContent=pitch;
+$(&#x27;candidatePitch&#x27;).textContent=pitch;
+if($(&#x27;hcRtrText&#x27;)) updateHealthcareRTR();
 
 let clientOTText=clientPaysOT
-? `${money(abr)} × ${otMult.toFixed(2)} = <b>${money(clientOTRevenue)}/OT hr</b>`
-: `Client OT billing is unchecked, therefore incremental client OT revenue = <b>$0.00/OT hr</b>`;
+? `${money(abr)} × ${otMult.toFixed(2)} = &lt;b&gt;${money(clientOTRevenue)}/OT hr&lt;/b&gt;`
+: `Client OT billing is unchecked, therefore incremental client OT revenue = &lt;b&gt;$0.00/OT hr&lt;/b&gt;`;
 
-$('details').innerHTML=`
-<div class="step story"><div class="title"><span class="emoji">🏥</span>1. How much money comes in?</div><div class="formula story">The facility pays <b>${money(br)}/hr</b>.<br>Medefis takes ${msp.toFixed(2)}% = ${money(fee)}.<br>So Siri receives <b>${money(abr)}/hr</b>.</div></div>
+$(&#x27;details&#x27;).innerHTML=`
+&lt;div class=&quot;step story&quot;&gt;&lt;div class=&quot;title&quot;&gt;&lt;span class=&quot;emoji&quot;&gt;🏥&lt;/span&gt;1. How much money comes in?&lt;/div&gt;&lt;div class=&quot;formula story&quot;&gt;The facility pays &lt;b&gt;${money(br)}/hr&lt;/b&gt;.&lt;br&gt;Medefis takes ${msp.toFixed(2)}% = ${money(fee)}.&lt;br&gt;So Siri receives &lt;b&gt;${money(abr)}/hr&lt;/b&gt;.&lt;/div&gt;&lt;/div&gt;
 
-<div class="step story"><div class="title"><span class="emoji">👩‍⚕️</span>2. How much does the candidate cost per regular hour?</div><div class="formula story">Candidate pay = ${money(pr)}/hr.<br>W2 payroll load = ${money(taxAmt)}/hr.<br>Tax-loaded pay cost = <b>${money(tpr)}/hr</b>.</div></div>
+&lt;div class=&quot;step story&quot;&gt;&lt;div class=&quot;title&quot;&gt;&lt;span class=&quot;emoji&quot;&gt;👩‍⚕️&lt;/span&gt;2. How much does the candidate cost per regular hour?&lt;/div&gt;&lt;div class=&quot;formula story&quot;&gt;Candidate pay = ${money(pr)}/hr.&lt;br&gt;W2 payroll load = ${money(taxAmt)}/hr.&lt;br&gt;Tax-loaded pay cost = &lt;b&gt;${money(tpr)}/hr&lt;/b&gt;.&lt;/div&gt;&lt;/div&gt;
 
-<div class="step story"><div class="title"><span class="emoji">🏠</span>3. Turn the weekly stipend into hourly cost</div><div class="formula story">${money(s)} stipend ÷ ${hrs.toFixed(0)} hours = <b>${money(shr)}/hr</b>.</div></div>
+&lt;div class=&quot;step story&quot;&gt;&lt;div class=&quot;title&quot;&gt;&lt;span class=&quot;emoji&quot;&gt;🏠&lt;/span&gt;3. Turn the weekly stipend into hourly cost&lt;/div&gt;&lt;div class=&quot;formula story&quot;&gt;${money(s)} stipend ÷ ${hrs.toFixed(0)} hours = &lt;b&gt;${money(shr)}/hr&lt;/b&gt;.&lt;/div&gt;&lt;/div&gt;
 
-<div class="step story"><div class="title"><span class="emoji">💵</span>4. What is the real candidate cost?</div><div class="formula story">${money(tpr)} tax-loaded pay + ${money(shr)} stipend cost = <b>${money(apr)}/hr actual candidate cost</b>.<br><br>Candidate weekly package: (${money(pr)} × ${hrs.toFixed(0)} hours) + ${money(s)} stipend = <b>${money(grossWeekly)}/week</b>.</div></div>
+&lt;div class=&quot;step story&quot;&gt;&lt;div class=&quot;title&quot;&gt;&lt;span class=&quot;emoji&quot;&gt;💵&lt;/span&gt;4. What is the real candidate cost?&lt;/div&gt;&lt;div class=&quot;formula story&quot;&gt;${money(tpr)} tax-loaded pay + ${money(shr)} stipend cost = &lt;b&gt;${money(apr)}/hr actual candidate cost&lt;/b&gt;.&lt;br&gt;&lt;br&gt;Candidate weekly package: (${money(pr)} × ${hrs.toFixed(0)} hours) + ${money(s)} stipend = &lt;b&gt;${money(grossWeekly)}/week&lt;/b&gt;.&lt;/div&gt;&lt;/div&gt;
 
-<div class="step story"><div class="title"><span class="emoji">⭐</span>5. What is Siri's margin?</div><div class="formula story">Money in: ${money(abr)}/hr.<br>Candidate cost: ${money(apr)}/hr.<br>${money(abr)} − ${money(apr)} = <b>${money(m)}/hr gross margin</b>.<br><br>Then subtract ${money(ops)}/hr operational cost:<br>${money(m)} − ${money(ops)} = <b>${money(netM)}/hr net margin (${netMP.toFixed(2)}%)</b>.</div></div>
+&lt;div class=&quot;step story&quot;&gt;&lt;div class=&quot;title&quot;&gt;&lt;span class=&quot;emoji&quot;&gt;⭐&lt;/span&gt;5. What is Siri&#x27;s margin?&lt;/div&gt;&lt;div class=&quot;formula story&quot;&gt;Money in: ${money(abr)}/hr.&lt;br&gt;Candidate cost: ${money(apr)}/hr.&lt;br&gt;${money(abr)} − ${money(apr)} = &lt;b&gt;${money(m)}/hr gross margin&lt;/b&gt;.&lt;br&gt;&lt;br&gt;Then subtract ${money(ops)}/hr operational cost:&lt;br&gt;${money(m)} − ${money(ops)} = &lt;b&gt;${money(netM)}/hr net margin (${netMP.toFixed(2)}%)&lt;/b&gt;.&lt;/div&gt;&lt;/div&gt;
 
-<div class="step story"><div class="title"><span class="emoji">🎯</span>6. What is the maximum taxable Pay Rate we can offer?</div><div class="formula story">To keep at least <b>${money(desiredMargin)}/hr net margin</b>, the maximum taxable Pay Rate is <b>${money(maxPayRate)}/hr</b>, while keeping the current stipend, hours, MSP fee, payroll load, and operational cost unchanged.</div></div>
+&lt;div class=&quot;step story&quot;&gt;&lt;div class=&quot;title&quot;&gt;&lt;span class=&quot;emoji&quot;&gt;🎯&lt;/span&gt;6. What is the maximum taxable Pay Rate we can offer?&lt;/div&gt;&lt;div class=&quot;formula story&quot;&gt;To keep at least &lt;b&gt;${money(desiredMargin)}/hr net margin&lt;/b&gt;, the maximum taxable Pay Rate is &lt;b&gt;${money(maxPayRate)}/hr&lt;/b&gt;, while keeping the current stipend, hours, MSP fee, payroll load, and operational cost unchanged.&lt;/div&gt;&lt;/div&gt;
 
-${hasOT ? `<div class="step story"><div class="title"><span class="emoji">⏰</span>7. What happens with ${otHours.toFixed(0)} OT hours?</div><div class="formula story">Candidate OT base pay: ${money(pr)} × ${otMult.toFixed(2)} = ${money(candidateOTPay)}.<br>After payroll load, Siri's candidate OT cost = <b>${money(candidateOTCost)}/OT hr</b>.<br><br>${clientPaysOT ? `Client OT is ON. Siri receives <b>${money(clientOTRevenue)}/OT hr</b>. OT margin = <b>${money(otMarginHr)}/OT hr</b>.` : `Client OT is OFF. This calculator assumes $0 extra client OT revenue, while Siri still pays <b>${money(candidateOTCost)}/OT hr</b>.`}<br><br>${otHours.toFixed(0)} OT hours change weekly margin by <b>${money(weeklyOTImpact)}</b>.</div></div>` : ''}
+${hasOT ? `&lt;div class=&quot;step story&quot;&gt;&lt;div class=&quot;title&quot;&gt;&lt;span class=&quot;emoji&quot;&gt;⏰&lt;/span&gt;7. What happens with ${otHours.toFixed(0)} OT hours?&lt;/div&gt;&lt;div class=&quot;formula story&quot;&gt;Candidate OT base pay: ${money(pr)} × ${otMult.toFixed(2)} = ${money(candidateOTPay)}.&lt;br&gt;After payroll load, Siri&#x27;s candidate OT cost = &lt;b&gt;${money(candidateOTCost)}/OT hr&lt;/b&gt;.&lt;br&gt;&lt;br&gt;${clientPaysOT ? `Client OT is ON. Siri receives &lt;b&gt;${money(clientOTRevenue)}/OT hr&lt;/b&gt;. OT margin = &lt;b&gt;${money(otMarginHr)}/OT hr&lt;/b&gt;.` : `Client OT is OFF. This calculator assumes $0 extra client OT revenue, while Siri still pays &lt;b&gt;${money(candidateOTCost)}/OT hr&lt;/b&gt;.`}&lt;br&gt;&lt;br&gt;${otHours.toFixed(0)} OT hours change weekly margin by &lt;b&gt;${money(weeklyOTImpact)}&lt;/b&gt;.&lt;/div&gt;&lt;/div&gt;` : &#x27;&#x27;}
 
-<div class="step story"><div class="title"><span class="emoji">🧮</span>${hasOT?'8':'7'}. What is the weekly and full-contract result?</div><div class="formula story">Regular weekly net margin = ${money(netM)} × ${hrs.toFixed(0)} = ${money(regularWeeklyMargin)}.${hasOT?`<br>Add OT impact: ${money(weeklyOTImpact)}.<br>`:'<br>'}Weekly margin = <b>${money(weekly)}</b>.<br><br>${money(weekly)} × ${tenure.toFixed(0)} weeks = <b>${money(contractMargin)} total contract margin</b>.</div></div>
+&lt;div class=&quot;step story&quot;&gt;&lt;div class=&quot;title&quot;&gt;&lt;span class=&quot;emoji&quot;&gt;🧮&lt;/span&gt;${hasOT?&#x27;8&#x27;:&#x27;7&#x27;}. What is the weekly and full-contract result?&lt;/div&gt;&lt;div class=&quot;formula story&quot;&gt;Regular weekly net margin = ${money(netM)} × ${hrs.toFixed(0)} = ${money(regularWeeklyMargin)}.${hasOT?`&lt;br&gt;Add OT impact: ${money(weeklyOTImpact)}.&lt;br&gt;`:&#x27;&lt;br&gt;&#x27;}Weekly margin = &lt;b&gt;${money(weekly)}&lt;/b&gt;.&lt;br&gt;&lt;br&gt;${money(weekly)} × ${tenure.toFixed(0)} weeks = &lt;b&gt;${money(contractMargin)} total contract margin&lt;/b&gt;.&lt;/div&gt;&lt;/div&gt;
 
-<div class="step story"><div class="title"><span class="emoji">📣</span>Simple recruiter takeaway</div><div class="formula story">Candidate package: <b>${money(grossWeekly)}/week</b>.<br>Estimated ${tenure.toFixed(0)}-week candidate earnings: <b>${money(candidateContractEarnings)}</b>.<br>Net company margin: <b>${money(netM)}/hr</b>.<br>Maximum taxable Pay Rate at the selected minimum margin: <b>${money(maxPayRate)}/hr</b>.${hasOT?`<br>${otHours.toFixed(0)} OT hours change weekly margin by <b>${money(weeklyOTImpact)}</b>.`:''}</div></div>`;
-if($('gsaLodging')) calculateGSA();
+&lt;div class=&quot;step story&quot;&gt;&lt;div class=&quot;title&quot;&gt;&lt;span class=&quot;emoji&quot;&gt;📣&lt;/span&gt;Simple recruiter takeaway&lt;/div&gt;&lt;div class=&quot;formula story&quot;&gt;Candidate package: &lt;b&gt;${money(grossWeekly)}/week&lt;/b&gt;.&lt;br&gt;Estimated ${tenure.toFixed(0)}-week candidate earnings: &lt;b&gt;${money(candidateContractEarnings)}&lt;/b&gt;.&lt;br&gt;Net company margin: &lt;b&gt;${money(netM)}/hr&lt;/b&gt;.&lt;br&gt;Maximum taxable Pay Rate at the selected minimum margin: &lt;b&gt;${money(maxPayRate)}/hr&lt;/b&gt;.${hasOT?`&lt;br&gt;${otHours.toFixed(0)} OT hours change weekly margin by &lt;b&gt;${money(weeklyOTImpact)}&lt;/b&gt;.`:&#x27;&#x27;}&lt;/div&gt;&lt;/div&gt;`;
+if($(&#x27;gsaLodging&#x27;)) calculateGSA();
 }
 
 function copyPitch(){
 
-let text=$('candidatePitch').textContent;
-if(navigator.clipboard && window.isSecureContext){
-navigator.clipboard.writeText(text).then(()=>{$('copyStatus').textContent='Copied!';setTimeout(()=>{$('copyStatus').textContent=''},1800)});
+let text=$(&#x27;candidatePitch&#x27;).textContent;
+if(navigator.clipboard &amp;&amp; window.isSecureContext){
+navigator.clipboard.writeText(text).then(()=&gt;{$(&#x27;copyStatus&#x27;).textContent=&#x27;Copied!&#x27;;setTimeout(()=&gt;{$(&#x27;copyStatus&#x27;).textContent=&#x27;&#x27;},1800)});
 }else{
-let ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();$('copyStatus').textContent='Copied!';setTimeout(()=>{$('copyStatus').textContent=''},1800);
+let ta=document.createElement(&#x27;textarea&#x27;);ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand(&#x27;copy&#x27;);ta.remove();$(&#x27;copyStatus&#x27;).textContent=&#x27;Copied!&#x27;;setTimeout(()=&gt;{$(&#x27;copyStatus&#x27;).textContent=&#x27;&#x27;},1800);
 }
 }
 function calculateGSA(){
-let lodging=parseFloat($('gsaLodging').value)||0;
-let mie=parseFloat($('gsaMie').value)||0;
-let stipend=num('stipend');
+let lodging=parseFloat($(&#x27;gsaLodging&#x27;).value)||0;
+let mie=parseFloat($(&#x27;gsaMie&#x27;).value)||0;
+let stipend=num(&#x27;stipend&#x27;);
 let daily=lodging+mie;
 let weekly=daily*7;
-if($('gsaCopySection')) $('gsaCopySection').style.display=(lodging>0 && mie>0)?'block':'none';
-$('gsaDaily').textContent=money(daily);
-$('gsaWeekly').textContent=money(weekly);
-$('gsaCurrentStipend').textContent=money(stipend);
-let pr=num('pr'), hrs=num('hours'), gross=(pr*hrs)+stipend;
-let summary=$('packageGsaSummary');
+if($(&#x27;gsaCopySection&#x27;)) $(&#x27;gsaCopySection&#x27;).style.display=(lodging&gt;0 &amp;&amp; mie&gt;0)?&#x27;block&#x27;:&#x27;none&#x27;;
+$(&#x27;gsaDaily&#x27;).textContent=money(daily);
+$(&#x27;gsaWeekly&#x27;).textContent=money(weekly);
+$(&#x27;gsaCurrentStipend&#x27;).textContent=money(stipend);
+let pr=num(&#x27;pr&#x27;), hrs=num(&#x27;hours&#x27;), gross=(pr*hrs)+stipend;
+let summary=$(&#x27;packageGsaSummary&#x27;);
 if(summary){
- let gsaText=(lodging>0 && mie>0)
- ? `\n\nGSA Comparison:\nDaily GSA reference: ${money(lodging)} Lodging + ${money(mie)} M&IE = ${money(daily)} per day\nWeekly GSA reference: ${money(daily)} × 7 days = ${money(weekly)} per week\nOur weekly stipend offer: ${money(stipend)}`
+ let gsaText=(lodging&gt;0 &amp;&amp; mie&gt;0)
+ ? `\n\nGSA Comparison:\nDaily GSA reference: ${money(lodging)} Lodging + ${money(mie)} M&amp;IE = ${money(daily)} per day\nWeekly GSA reference: ${money(daily)} × 7 days = ${money(weekly)} per week\nOur weekly stipend offer: ${money(stipend)}`
  : ``;
  summary.textContent=`Hourly Pay Rate: ${money(pr)}/hour on W2\nWeekly Stipend (Non-Taxable, subject to eligibility): ${money(stipend)}\nGross Weekly Pay: ${money(gross)} (based on ${hrs.toFixed(0)} hours worked per week)${gsaText}`;
 }
-let status=$('gsaStatus');
-if(daily<=0){status.style.display='none';if($('qualityGsa')) $('qualityGsa').textContent='Not Checked';return;}
-status.style.display='block';
-if(stipend<=weekly){
- status.className='gsa-status gsa-ok';if($('qualityGsa')) $('qualityGsa').textContent='Within Reference';
- status.innerHTML='✅ REFERENCE CHECK: Current weekly stipend of <b>'+money(stipend)+'</b> is within the simple 7-day combined GSA reference of <b>'+money(weekly)+'</b>. This does not determine tax-free eligibility.';
+let status=$(&#x27;gsaStatus&#x27;);
+if(daily&lt;=0){status.style.display=&#x27;none&#x27;;if($(&#x27;qualityGsa&#x27;)) $(&#x27;qualityGsa&#x27;).textContent=&#x27;Not Checked&#x27;;return;}
+status.style.display=&#x27;block&#x27;;
+if(stipend&lt;=weekly){
+ status.className=&#x27;gsa-status gsa-ok&#x27;;if($(&#x27;qualityGsa&#x27;)) $(&#x27;qualityGsa&#x27;).textContent=&#x27;Within Reference&#x27;;
+ status.innerHTML=&#x27;✅ REFERENCE CHECK: Current weekly stipend of &lt;b&gt;&#x27;+money(stipend)+&#x27;&lt;/b&gt; is within the simple 7-day combined GSA reference of &lt;b&gt;&#x27;+money(weekly)+&#x27;&lt;/b&gt;. This does not determine tax-free eligibility.&#x27;;
 }else{
- status.className='gsa-status gsa-over';if($('qualityGsa')) $('qualityGsa').textContent='Review Required';
- status.innerHTML='⚠️ REVIEW REQUIRED: Current weekly stipend of <b>'+money(stipend)+'</b> is above the simple 7-day combined GSA reference of <b>'+money(weekly)+'</b>. Send for compliance/payroll review before proceeding.';
+ status.className=&#x27;gsa-status gsa-over&#x27;;if($(&#x27;qualityGsa&#x27;)) $(&#x27;qualityGsa&#x27;).textContent=&#x27;Review Required&#x27;;
+ status.innerHTML=&#x27;⚠️ REVIEW REQUIRED: Current weekly stipend of &lt;b&gt;&#x27;+money(stipend)+&#x27;&lt;/b&gt; is above the simple 7-day combined GSA reference of &lt;b&gt;&#x27;+money(weekly)+&#x27;&lt;/b&gt;. Send for compliance/payroll review before proceeding.&#x27;;
 }
 }
 function copyPackageGSA(){
-let text=$('packageGsaSummary').textContent;
-if(navigator.clipboard && window.isSecureContext){
- navigator.clipboard.writeText(text).then(()=>{$('copyGsaStatus').textContent='Copied!';setTimeout(()=>{$('copyGsaStatus').textContent=''},1800)});
+let text=$(&#x27;packageGsaSummary&#x27;).textContent;
+if(navigator.clipboard &amp;&amp; window.isSecureContext){
+ navigator.clipboard.writeText(text).then(()=&gt;{$(&#x27;copyGsaStatus&#x27;).textContent=&#x27;Copied!&#x27;;setTimeout(()=&gt;{$(&#x27;copyGsaStatus&#x27;).textContent=&#x27;&#x27;},1800)});
 }else{
- let ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();$('copyGsaStatus').textContent='Copied!';setTimeout(()=>{$('copyGsaStatus').textContent=''},1800);
+ let ta=document.createElement(&#x27;textarea&#x27;);ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand(&#x27;copy&#x27;);ta.remove();$(&#x27;copyGsaStatus&#x27;).textContent=&#x27;Copied!&#x27;;setTimeout(()=&gt;{$(&#x27;copyGsaStatus&#x27;).textContent=&#x27;&#x27;},1800);
 }
 }
-function toggleTheme(){document.body.classList.toggle('dark');let d=document.body.classList.contains('dark');$('theme').textContent=d?'☀️ Day':'🌙 Night';localStorage.setItem('medefisTheme',d?'dark':'light')}
-$('clientPaysOT').addEventListener('change',calculate);document.querySelectorAll('input').forEach(el=>el.addEventListener('input',calculate));
-['gsaLodging','gsaMie'].forEach(id=>{if($(id)) $(id).addEventListener('input',calculateGSA)});if(localStorage.getItem('medefisTheme')==='dark'){document.body.classList.add('dark');$('theme').textContent='☀️ Day'}calculate();
-</script></body></html>
+function toggleTheme(){document.body.classList.toggle(&#x27;dark&#x27;);let d=document.body.classList.contains(&#x27;dark&#x27;);$(&#x27;theme&#x27;).textContent=d?&#x27;☀️ Day&#x27;:&#x27;🌙 Night&#x27;;localStorage.setItem(&#x27;medefisTheme&#x27;,d?&#x27;dark&#x27;:&#x27;light&#x27;)}
+$(&#x27;clientPaysOT&#x27;).addEventListener(&#x27;change&#x27;,calculate);document.querySelectorAll(&#x27;input&#x27;).forEach(el=&gt;el.addEventListener(&#x27;input&#x27;,calculate));
+[&#x27;gsaLodging&#x27;,&#x27;gsaMie&#x27;].forEach(id=&gt;{if($(id)) $(id).addEventListener(&#x27;input&#x27;,calculateGSA)});if(localStorage.getItem(&#x27;medefisTheme&#x27;)===&#x27;dark&#x27;){document.body.classList.add(&#x27;dark&#x27;);$(&#x27;theme&#x27;).textContent=&#x27;☀️ Day&#x27;}calculate();
+&lt;/script&gt;&lt;script&gt;
+(function(){
+ const send=()=&gt;parent.postMessage({type:&#x27;calcHeight&#x27;,height:document.documentElement.scrollHeight},&#x27;*&#x27;);
+ new ResizeObserver(send).observe(document.body);
+ window.addEventListener(&#x27;load&#x27;,send);
+ setTimeout(send,300); setTimeout(send,1000);
+})();
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" title="Healthcare Staffing Calculator"></iframe>
+</div>
+</div>
+<script>
+function showApp(which){
+ document.getElementById('itFrame').classList.toggle('hidden',which!=='it');
+ document.getElementById('hcFrame').classList.toggle('hidden',which!=='hc');
+ document.getElementById('itTab').classList.toggle('active',which==='it');
+ document.getElementById('hcTab').classList.toggle('active',which==='hc');
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+window.addEventListener('message',e=>{
+ if(!e.data||e.data.type!=='calcHeight') return;
+ const frames=[document.getElementById('itFrame'),document.getElementById('hcFrame')];
+ frames.forEach(f=>{if(f.contentWindow===e.source) f.style.height=(e.data.height+20)+'px';});
+});
+</script>
+</body></html>
